@@ -3,100 +3,97 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#2a0406">
+<meta name="theme-color" content="#1a0203">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="구너 운세">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔴</text></svg>">
 <title>오늘의 구너 운세 — COYG</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Archivo+Black&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
+    /* 아스날 공식 계열: 레드 / 크레스트 네이비 / 크레스트 골드 / 화이트 */
     --red: #EF0107;
-    --red-deep: #9c0a0e;
-    --red-dark: #3a0508;
-    --gold: #d4af37;
-    --gold-soft: #e6c75e;
+    --red-bright: #ff2a30;
+    --navy: #023474;
+    --gold: #9C824A;
+    --gold-bright: #d4af37;
+    --gold-light: #f0d98c;
+    --bg-deep: #1a0203;
     --cream: #fdf6e9;
     --ink: #fff5f5;
-    --ink-dim: #f3b8ba;
+    --ink-dim: #e8a9ab;
   }
 
   html, body { overflow-x: hidden; }
 
   body {
-    font-family: 'Gowun Dodum', sans-serif;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, 'Apple SD Gothic Neo', sans-serif;
     color: var(--ink);
-    background: #2a0406;
+    background: var(--bg-deep);
     min-height: 100vh;
     min-height: 100dvh;
     -webkit-font-smoothing: antialiased;
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* iOS 사파리는 background-attachment: fixed 를 무시해서 고정 레이어로 처리 */
+  .en-display { font-family: 'Anton', 'Pretendard', sans-serif; font-weight: 400; }
+
+  /* iOS는 background-attachment: fixed 미지원 → 고정 레이어 */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
     z-index: -1;
     background:
-      radial-gradient(ellipse 90% 40% at 50% -5%, rgba(255, 230, 180, 0.18), transparent 60%),
-      linear-gradient(180deg, #2a0406 0%, #4d080c 30%, #6e0a10 70%, #4d080c 100%);
+      radial-gradient(ellipse 100% 45% at 50% -8%, rgba(255, 215, 150, 0.14), transparent 60%),
+      linear-gradient(180deg, #1a0203 0%, #45070b 35%, #66090f 70%, #3a0507 100%);
   }
 
   .wrap {
     max-width: 430px;
     margin: 0 auto;
-    padding: calc(36px + env(safe-area-inset-top)) 18px calc(70px + env(safe-area-inset-bottom));
+    padding: calc(24px + env(safe-area-inset-top)) 18px calc(60px + env(safe-area-inset-bottom));
     position: relative;
   }
 
-  button, .flip-inner, .sign-card { touch-action: manipulation; }
-
-  /* ---------- 공통 ---------- */
-  .cannon { display: block; margin: 0 auto 6px; }
-
-  h1 {
-    font-size: 24px;
-    text-align: center;
-    letter-spacing: 1px;
-    color: var(--cream);
-  }
-  h1 .en {
-    font-family: 'Archivo Black', sans-serif;
-    display: block;
-    font-size: 13px;
-    letter-spacing: 5px;
-    color: var(--gold);
-    margin-bottom: 8px;
-  }
-  .date-line {
-    text-align: center;
-    font-size: 14px;
-    color: var(--ink-dim);
-    margin-top: 10px;
-    letter-spacing: 1px;
-  }
+  button, .flip-inner { touch-action: manipulation; }
 
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(16px); }
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* ---------- 티켓 화면 ---------- */
-  #gate { animation: fadeUp 0.5s ease both; }
+  /* ============ 입장 (티켓) ============ */
+  #gate { animation: fadeUp 0.5s ease both; padding-top: 24px; }
+
+  .cannon { display: block; margin: 0 auto 8px; }
+
+  h1 { text-align: center; }
+  h1 .en {
+    display: block;
+    font-family: 'Anton', sans-serif;
+    font-size: 15px;
+    letter-spacing: 6px;
+    color: var(--gold-bright);
+    margin-bottom: 10px;
+  }
+  h1 .ko { font-size: 26px; font-weight: 800; letter-spacing: 0.5px; color: var(--cream); }
+
+  .date-line { text-align: center; font-size: 14px; color: var(--ink-dim); margin-top: 10px; letter-spacing: 1px; }
 
   .ticket {
-    margin-top: 30px;
+    margin-top: 28px;
     background: var(--cream);
     color: #2b1212;
     border-radius: 14px;
     overflow: hidden;
-    box-shadow: 0 14px 40px rgba(0,0,0,0.45);
+    box-shadow: 0 14px 40px rgba(0,0,0,0.5);
     position: relative;
   }
   .ticket::before, .ticket::after {
@@ -104,7 +101,7 @@
     position: absolute;
     width: 26px; height: 26px;
     border-radius: 50%;
-    background: #5c090e;
+    background: #4a070b;
     top: 50%;
     transform: translateY(-50%);
     z-index: 2;
@@ -122,21 +119,21 @@
     flex-wrap: wrap;
     gap: 4px;
   }
+  .ticket-band .t1 { font-family: 'Anton', sans-serif; font-size: 16px; letter-spacing: 2px; }
+  .ticket-band .t2 { font-size: 11px; letter-spacing: 1px; opacity: 0.9; font-weight: 600; }
   @media (max-width: 400px) {
-    .ticket-band .t1 { font-size: 13px; letter-spacing: 1px; }
+    .ticket-band .t1 { font-size: 14px; letter-spacing: 1px; }
     .ticket-band .t2 { font-size: 10px; }
   }
-  .ticket-band .t1 { font-family: 'Archivo Black', sans-serif; font-size: 15px; letter-spacing: 2px; }
-  .ticket-band .t2 { font-size: 11px; letter-spacing: 1px; opacity: 0.9; }
 
   .ticket-body { padding: 22px 20px 20px; border-bottom: 2px dashed #d8c6b0; }
-  .ticket-label { font-size: 11px; letter-spacing: 2px; color: #a08465; margin-bottom: 6px; }
+  .ticket-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: #a08465; margin-bottom: 6px; }
   .ticket-row { margin-bottom: 16px; }
   .ticket-row:last-child { margin-bottom: 0; }
 
   .ticket input {
     width: 100%;
-    font-family: 'Gowun Dodum', sans-serif;
+    font-family: inherit;
     font-size: 17px;
     color: #2b1212;
     background: transparent;
@@ -147,7 +144,6 @@
     border-radius: 0;
   }
   .ticket input:focus { border-bottom-color: var(--red); }
-  /* iOS: 빈 date 입력칸 높이 유지 + 좌측 정렬 */
   .ticket input[type="date"] {
     min-height: 40px;
     text-align: left;
@@ -156,14 +152,9 @@
     background: transparent;
   }
 
-  .ticket-foot {
-    padding: 14px 20px 18px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .seat { font-size: 12px; color: #a08465; line-height: 1.6; }
-  .seat b { color: #2b1212; font-size: 14px; }
+  .ticket-foot { padding: 14px 20px 18px; display: flex; justify-content: space-between; align-items: center; }
+  .seat { font-size: 11px; font-weight: 700; letter-spacing: 1px; color: #a08465; line-height: 1.7; }
+  .seat b { color: #2b1212; font-size: 13px; }
   .barcode {
     width: 90px; height: 36px;
     background: repeating-linear-gradient(90deg, #2b1212 0 2px, transparent 2px 5px, #2b1212 5px 8px, transparent 8px 10px);
@@ -174,11 +165,11 @@
     display: block;
     width: 100%;
     margin-top: 22px;
-    background: linear-gradient(180deg, #ff2a30, var(--red) 55%, #c60409);
+    background: linear-gradient(180deg, var(--red-bright), var(--red) 55%, #c60409);
     color: #fff;
-    font-family: 'Gowun Dodum', sans-serif;
+    font-family: inherit;
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 800;
     letter-spacing: 2px;
     border: none;
     border-radius: 14px;
@@ -188,49 +179,314 @@
     transition: transform 0.15s ease;
   }
   .enter-btn:active { transform: scale(0.97); }
-  .gate-hint { text-align: center; font-size: 12px; color: var(--ink-dim); margin-top: 14px; }
+  .gate-hint { text-align: center; font-size: 13px; color: var(--ink-dim); margin-top: 14px; }
 
-  /* ---------- 운세 화면 ---------- */
+  /* ============ 운세 화면 ============ */
   #pitch { display: none; }
 
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
   .back-btn {
     background: none;
     border: 1px solid rgba(255,255,255,0.3);
     color: var(--ink-dim);
     font-family: inherit;
     font-size: 12px;
+    font-weight: 600;
     padding: 7px 14px;
     border-radius: 99px;
     cursor: pointer;
-    margin-bottom: 20px;
+  }
+  .top-date { font-size: 12px; font-weight: 600; color: var(--ink-dim); letter-spacing: 1px; }
+
+  /* ---------- 히어로: 럭키 거너 카드 (풀스크린) ---------- */
+  .hero {
+    min-height: calc(100vh - 120px);
+    min-height: calc(100dvh - 120px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 10px 0 20px;
   }
 
-  .greet {
-    text-align: center;
-    margin-bottom: 24px;
-    animation: fadeUp 0.5s ease both;
-  }
-  .greet .hello { font-size: 19px; line-height: 1.6; }
-  .greet .hello b { color: var(--gold-soft); }
-  .greet .sub { font-size: 13px; color: var(--ink-dim); margin-top: 6px; letter-spacing: 1px; }
+  .hero-title { text-align: center; margin-bottom: 18px; animation: fadeUp 0.5s ease both; }
+  .hero-title .en { font-family: 'Anton', sans-serif; font-size: 13px; letter-spacing: 5px; color: var(--gold-bright); display: block; margin-bottom: 6px; }
+  .hero-title .ko { font-size: 21px; font-weight: 800; }
+  .hero-title .who { font-size: 13px; color: var(--ink-dim); margin-top: 6px; font-weight: 500; }
 
-  .form-total {
-    text-align: center;
-    margin: 18px 0 26px;
-    animation: fadeUp 0.5s ease 0.05s both;
+  /* 등급별 리빌 플래시 */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: -40px 0;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 0;
   }
-  .form-total .balls { font-size: 26px; letter-spacing: 6px; }
+  .hero.reveal-standard::before {
+    background: radial-gradient(circle at 50% 45%, rgba(239, 1, 7, 0.35), transparent 60%);
+    animation: flash 1.2s ease-out 0.35s both;
+  }
+  .hero.reveal-star::before {
+    background: radial-gradient(circle at 50% 45%, rgba(255, 60, 60, 0.5), rgba(239,1,7,0.15) 45%, transparent 65%);
+    animation: flash 1.6s ease-out 0.4s both;
+  }
+  .hero.reveal-legend::before {
+    background: radial-gradient(circle at 50% 45%, rgba(240, 217, 140, 0.65), rgba(212,175,55,0.2) 45%, transparent 70%);
+    animation: flash 2.2s ease-out 0.45s both;
+  }
+  @keyframes flash {
+    0% { opacity: 0; }
+    25% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  .flip-box {
+    perspective: 1200px;
+    width: min(78vw, 310px);
+    position: relative;
+    z-index: 1;
+  }
+  .flip-inner {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 0.64;
+    transform-style: preserve-3d;
+    transition: transform 0.9s cubic-bezier(0.25, 0.7, 0.3, 1);
+    cursor: pointer;
+  }
+  .flip-inner.flipped { transform: rotateY(180deg); }
+  /* 등급별 뒤집기 속도/연출 */
+  .reveal-star .flip-inner { transition-duration: 1.1s; }
+  .reveal-legend .flip-inner { transition-duration: 1.4s; }
+  .reveal-star .flip-inner.flipped { animation: starLand 0.5s ease 1.1s both; }
+  .reveal-legend .flip-inner.flipped { animation: legendLand 0.7s ease 1.4s both; }
+  @keyframes starLand {
+    0% { transform: rotateY(180deg) scale(1); }
+    40% { transform: rotateY(180deg) scale(1.06); }
+    100% { transform: rotateY(180deg) scale(1); }
+  }
+  @keyframes legendLand {
+    0% { transform: rotateY(180deg) scale(1); }
+    30% { transform: rotateY(180deg) scale(1.1); }
+    55% { transform: rotateY(180deg) scale(0.97); }
+    100% { transform: rotateY(180deg) scale(1); }
+  }
+
+  .card-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  /* 카드 뒷면 (미공개) */
+  .card-back-face {
+    background:
+      repeating-linear-gradient(135deg, rgba(255,255,255,0.05) 0 14px, transparent 14px 28px),
+      linear-gradient(180deg, #d40106, #8f0408);
+    border: 2px solid var(--gold-bright);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+  .card-back-face .q { font-family: 'Anton', sans-serif; color: var(--gold-light); font-size: 17px; letter-spacing: 4px; }
+  .card-back-face .tap { color: #fff; font-size: 14px; font-weight: 600; letter-spacing: 1px; animation: pulse 1.6s ease infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  /* 카드 앞면 — 등급 공통 */
+  .card-front-face {
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    color: #2b1212;
+  }
+
+  /* 등급: FIRST TEAM (레드) */
+  .card-front-face.t-standard {
+    background: linear-gradient(180deg, #fdf6e9 0%, #f6e8d2 100%);
+    border: 2px solid var(--red);
+  }
+  /* 등급: STAR (블랙 스페셜) */
+  .card-front-face.t-star {
+    background: linear-gradient(160deg, #16161c 0%, #26262e 55%, #16161c 100%);
+    border: 2px solid var(--red-bright);
+    color: #f5f0f0;
+  }
+  /* 등급: LEGEND (골드 홀로) */
+  .card-front-face.t-legend {
+    background: linear-gradient(160deg, #f7e8b8 0%, #dfbb66 55%, #f0d98c 100%);
+    border: 2px solid #fff2c4;
+    box-shadow: 0 0 34px rgba(212, 175, 55, 0.55);
+  }
+
+  /* 샤인 스윕 — star/legend */
+  .card-front-face .shine {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.45) 48%, rgba(255,255,255,0.1) 52%, transparent 65%);
+    transform: translateX(-120%);
+    z-index: 5;
+  }
+  .reveal-star .t-star .shine { animation: sweep 1.1s ease 1.25s both; }
+  .reveal-legend .t-legend .shine { animation: sweep 1.3s ease 1.55s both, sweep 1.3s ease 4s; }
+  @keyframes sweep {
+    from { transform: translateX(-120%); }
+    to   { transform: translateX(120%); }
+  }
+
+  /* 사진 영역 — 카드의 절반 이상, 선수 얼굴 크게 */
+  .p-photo-zone {
+    position: relative;
+    height: 54%;
+    background: radial-gradient(circle at 50% 18%, #ffecec, #efc3c3);
+    overflow: hidden;
+    flex: none;
+  }
+  .t-star .p-photo-zone { background: radial-gradient(circle at 50% 18%, #3a3a46, #1b1b22); }
+  .t-legend .p-photo-zone { background: radial-gradient(circle at 50% 18%, #fff6d8, #e2c272); }
+
+  .p-photo-zone img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 12%;
+  }
+  .p-fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Anton', sans-serif;
+    font-size: 84px;
+    color: rgba(255,255,255,0.92);
+    background: linear-gradient(180deg, var(--red), #a00408);
+  }
+  .t-legend .p-fallback { background: linear-gradient(180deg, #c9a23c, #9C824A); }
+
+  .p-num {
+    position: absolute;
+    top: 8px; right: 14px;
+    font-family: 'Anton', sans-serif;
+    font-size: 46px;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.85);
+    text-shadow: 0 2px 8px rgba(0,0,0,0.45);
+    z-index: 3;
+  }
+  .p-badge {
+    position: absolute;
+    top: 12px; left: 12px;
+    font-family: 'Anton', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    background: var(--red);
+    color: #fff;
+    border-radius: 99px;
+    padding: 5px 12px;
+    z-index: 3;
+  }
+  .t-star .p-badge { background: #000; border: 1px solid var(--red-bright); color: var(--red-bright); }
+  .t-legend .p-badge { background: #2b1f06; color: var(--gold-light); }
+
+  .p-info { flex: 1; padding: 13px 14px 12px; text-align: center; display: flex; flex-direction: column; min-height: 0; }
+  .p-name { font-size: 21px; font-weight: 800; letter-spacing: 0.5px; }
+  .p-name-en { font-family: 'Anton', sans-serif; font-size: 11px; letter-spacing: 2.5px; margin-top: 4px; opacity: 0.55; }
+  .p-chant {
+    margin-top: auto;
+    margin-bottom: auto;
+    padding-top: 8px;
+    font-size: 13px;
+    line-height: 1.6;
+    font-weight: 600;
+    font-style: italic;
+    white-space: pre-line;
+    color: #8c181b;
+  }
+  .t-star .p-chant { color: #ff8a8d; }
+  .t-legend .p-chant { color: #5c4408; }
+  .p-chant-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; opacity: 0.55; padding-top: 6px; }
+
+  /* 레전드 반짝이 파티클 */
+  .spark {
+    position: absolute;
+    font-size: 14px;
+    color: var(--gold-light);
+    pointer-events: none;
+    z-index: 6;
+    opacity: 0;
+    animation: sparkle 1.6s ease-out both;
+  }
+  @keyframes sparkle {
+    0% { opacity: 0; transform: translateY(0) scale(0.4); }
+    25% { opacity: 1; transform: translateY(-14px) scale(1.15); }
+    100% { opacity: 0; transform: translateY(-46px) scale(0.5); }
+  }
+  .spark.red { color: var(--red-bright); }
+
+  /* 응원 멘트 + 스크롤 유도 */
+  .p-cheer {
+    max-width: 330px;
+    margin: 20px auto 0;
+    text-align: center;
+    font-size: 14.5px;
+    line-height: 1.8;
+    color: var(--cream);
+    display: none;
+  }
+  .p-cheer.show { display: block; animation: fadeUp 0.5s ease both; }
+
+  .scroll-cue {
+    margin-top: 22px;
+    display: none;
+    background: none;
+    border: 1px solid rgba(240, 217, 140, 0.5);
+    color: var(--gold-light);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 11px 22px;
+    border-radius: 99px;
+    cursor: pointer;
+  }
+  .scroll-cue.show { display: inline-block; animation: fadeUp 0.5s ease 0.3s both; }
+  .scroll-cue .arrow { display: inline-block; animation: bob 1.4s ease infinite; margin-left: 4px; }
+  @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+
+  /* ---------- 운세 본문 ---------- */
+  .greet { text-align: center; margin: 34px 0 18px; }
+  .greet .hello { font-size: 19px; font-weight: 700; line-height: 1.6; }
+  .greet .hello b { color: var(--gold-light); }
+
+  .form-total { text-align: center; margin: 16px 0 24px; }
+  .form-total .balls { font-size: 25px; letter-spacing: 6px; }
   .form-total .balls .off { opacity: 0.22; filter: grayscale(1); }
   .form-total .form-word {
     display: inline-block;
-    margin-top: 10px;
-    font-family: 'Archivo Black', sans-serif;
-    font-size: 12px;
+    margin-top: 12px;
+    font-family: 'Anton', sans-serif;
+    font-size: 13px;
     letter-spacing: 3px;
-    color: var(--gold);
-    border: 1px solid rgba(212, 175, 55, 0.5);
+    color: var(--gold-bright);
+    border: 1px solid rgba(212, 175, 55, 0.55);
     border-radius: 99px;
-    padding: 6px 16px;
+    padding: 7px 18px;
   }
 
   .f-card {
@@ -240,163 +496,15 @@
     border-radius: 14px;
     padding: 18px 18px 16px;
     margin-bottom: 12px;
-    animation: fadeUp 0.5s ease both;
   }
-  .f-card:nth-of-type(2) { animation-delay: 0.07s; }
-  .f-card:nth-of-type(3) { animation-delay: 0.14s; }
-  .f-card:nth-of-type(4) { animation-delay: 0.21s; }
-
   .f-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 9px; }
-  .f-label { font-size: 15px; font-weight: bold; color: var(--gold-soft); }
-  .f-label .k { font-size: 11px; color: var(--ink-dim); margin-left: 6px; letter-spacing: 1px; }
+  .f-label { font-size: 15px; font-weight: 800; color: var(--gold-light); }
+  .f-label .k { font-size: 11px; font-weight: 600; color: var(--ink-dim); margin-left: 6px; letter-spacing: 1px; }
   .f-balls { font-size: 12px; letter-spacing: 2px; }
   .f-balls .off { opacity: 0.22; filter: grayscale(1); }
-  .f-text { font-size: 14.5px; line-height: 1.85; }
+  .f-text { font-size: 14.5px; line-height: 1.85; font-weight: 500; }
 
-  /* ---------- 럭키 거너 카드 ---------- */
-  .draw-zone { margin: 26px 0 8px; animation: fadeUp 0.5s ease 0.28s both; }
-  .draw-title {
-    text-align: center;
-    font-size: 15px;
-    color: var(--cream);
-    margin-bottom: 14px;
-    letter-spacing: 1px;
-  }
-
-  .flip-box { perspective: 1100px; width: 250px; margin: 0 auto; }
-  .flip-inner {
-    position: relative;
-    width: 100%;
-    height: 360px;
-    transform-style: preserve-3d;
-    transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.3, 1);
-    cursor: pointer;
-  }
-  .flip-inner.flipped { transform: rotateY(180deg); }
-
-  .card-face {
-    position: absolute;
-    inset: 0;
-    backface-visibility: hidden;
-    border-radius: 18px;
-    overflow: hidden;
-  }
-
-  .card-back-face {
-    background:
-      repeating-linear-gradient(135deg, rgba(255,255,255,0.05) 0 14px, transparent 14px 28px),
-      linear-gradient(180deg, #d40106, #8f0408);
-    border: 2px solid var(--gold);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 14px;
-  }
-  .card-back-face .q {
-    font-family: 'Archivo Black', sans-serif;
-    color: var(--gold);
-    font-size: 13px;
-    letter-spacing: 3px;
-  }
-  .card-back-face .tap { color: #fff; font-size: 14px; letter-spacing: 1px; animation: pulse 1.6s ease infinite; }
-  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.45; } }
-
-  .card-front-face {
-    background: linear-gradient(180deg, #fdf6e9 58%, #f3e3c2);
-    color: #2b1212;
-    transform: rotateY(180deg);
-    display: flex;
-    flex-direction: column;
-    border: 2px solid var(--gold);
-  }
-  .card-front-face.legend { background: linear-gradient(180deg, #fff8e0 58%, #ecd28a); }
-
-  .p-photo-zone {
-    position: relative;
-    height: 190px;
-    background: radial-gradient(circle at 50% 20%, #ffe9e9, #f3c6c6);
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    overflow: hidden;
-  }
-  .card-front-face.legend .p-photo-zone { background: radial-gradient(circle at 50% 20%, #fff3cf, #ecd596); }
-  .p-photo-zone img {
-    width: 150px; height: 150px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 4px solid #fff;
-    margin-bottom: 14px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
-    background: #fff;
-  }
-  .p-fallback {
-    width: 150px; height: 150px;
-    border-radius: 50%;
-    border: 4px solid #fff;
-    margin-bottom: 14px;
-    background: var(--red);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Archivo Black', sans-serif;
-    font-size: 44px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
-  }
-  .p-num {
-    position: absolute;
-    top: 10px; right: 14px;
-    font-family: 'Archivo Black', sans-serif;
-    font-size: 40px;
-    color: rgba(239, 1, 7, 0.22);
-  }
-  .p-badge {
-    position: absolute;
-    top: 12px; left: 12px;
-    font-size: 10px;
-    font-weight: bold;
-    letter-spacing: 1.5px;
-    background: var(--red);
-    color: #fff;
-    border-radius: 99px;
-    padding: 4px 10px;
-  }
-  .card-front-face.legend .p-badge { background: #b8860b; }
-
-  .p-info { flex: 1; padding: 12px 14px 14px; text-align: center; display: flex; flex-direction: column; }
-  .p-name { font-size: 19px; font-weight: bold; }
-  .p-name-en { font-family: 'Archivo Black', sans-serif; font-size: 10px; letter-spacing: 2px; color: #a08465; margin-top: 3px; }
-  .p-chant {
-    margin-top: 10px;
-    font-size: 12.5px;
-    line-height: 1.65;
-    color: #7a1518;
-    font-style: italic;
-    white-space: pre-line;
-  }
-  .p-chant-label { font-size: 10px; letter-spacing: 2px; color: #b8860b; margin-top: auto; padding-top: 8px; }
-
-  .p-cheer {
-    max-width: 320px;
-    margin: 18px auto 0;
-    text-align: center;
-    font-size: 14px;
-    line-height: 1.8;
-    color: var(--cream);
-    display: none;
-  }
-  .p-cheer.show { display: block; animation: fadeUp 0.5s ease both; }
-
-  /* ---------- 행운 3종 ---------- */
-  .lucky-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-top: 26px;
-    animation: fadeUp 0.5s ease 0.32s both;
-  }
+  .lucky-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 24px; }
   .lucky-item {
     text-align: center;
     padding: 16px 6px 14px;
@@ -404,8 +512,8 @@
     background: rgba(255,255,255,0.07);
     border: 1px solid rgba(255,255,255,0.12);
   }
-  .lucky-item .k { font-size: 11px; color: var(--ink-dim); margin-bottom: 7px; letter-spacing: 0.5px; }
-  .lucky-item .v { font-size: 15px; font-weight: bold; }
+  .lucky-item .k { font-size: 11px; font-weight: 600; color: var(--ink-dim); margin-bottom: 7px; }
+  .lucky-item .v { font-size: 15px; font-weight: 800; }
   .color-dot {
     display: inline-block;
     width: 12px; height: 12px;
@@ -415,42 +523,46 @@
     border: 1px solid rgba(255,255,255,0.5);
   }
 
-  .one-line {
-    text-align: center;
-    margin-top: 30px;
-    padding: 22px 16px;
-    border-top: 1px dashed rgba(212, 175, 55, 0.45);
-    border-bottom: 1px dashed rgba(212, 175, 55, 0.45);
-    font-size: 15.5px;
-    line-height: 1.95;
-    color: var(--gold-soft);
-    white-space: pre-line;
-    animation: fadeUp 0.5s ease 0.36s both;
+  .mission {
+    margin-top: 26px;
+    padding: 20px 18px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(156, 130, 74, 0.22), rgba(212, 175, 55, 0.1));
+    border: 1px dashed rgba(212, 175, 55, 0.55);
+    font-size: 14.5px;
+    line-height: 1.85;
+    font-weight: 600;
+    color: var(--gold-light);
   }
+  .mission .m-label { font-family: 'Anton', sans-serif; font-size: 11px; letter-spacing: 3px; display: block; margin-bottom: 8px; color: var(--gold-bright); }
 
   footer {
     text-align: center;
-    margin-top: 34px;
+    margin-top: 36px;
     font-size: 11.5px;
+    font-weight: 500;
     line-height: 1.9;
-    color: rgba(243, 184, 186, 0.65);
+    color: rgba(232, 169, 171, 0.6);
     letter-spacing: 1px;
   }
-  footer .nlf { font-family: 'Archivo Black', sans-serif; font-size: 10px; letter-spacing: 3px; color: rgba(212,175,55,0.8); }
+  footer .nlf { font-family: 'Anton', sans-serif; font-size: 12px; letter-spacing: 4px; color: rgba(212,175,55,0.85); }
 </style>
 </head>
 <body>
 
 <div class="wrap">
 
-  <!-- ===== 입장 (티켓) 화면 ===== -->
+  <!-- ===== 입장 (티켓) ===== -->
   <section id="gate">
     <svg class="cannon" width="110" height="52" viewBox="0 0 120 58" fill="none">
       <path d="M12 26 L88 16 L104 19 L104 28 L88 26 L12 36 Z" fill="#d4af37"/>
       <circle cx="42" cy="42" r="13" stroke="#d4af37" stroke-width="5" fill="none"/>
       <circle cx="42" cy="42" r="3.5" fill="#d4af37"/>
     </svg>
-    <h1><span class="en">DAILY MATCHDAY</span>오늘의 구너 운세</h1>
+    <h1>
+      <span class="en">DAILY GOONER FORTUNE</span>
+      <span class="ko">오늘의 구너 운세</span>
+    </h1>
     <div class="date-line" id="gateDate"></div>
 
     <div class="ticket">
@@ -480,69 +592,36 @@
 
   <!-- ===== 운세 화면 ===== -->
   <section id="pitch">
-    <button class="back-btn" onclick="goGate()">← 티켓 다시 쓰기</button>
-
-    <div class="greet">
-      <p class="hello" id="hello"></p>
-      <p class="sub" id="pitchDate"></p>
+    <div class="topbar">
+      <button class="back-btn" onclick="goGate()">← 티켓 다시 쓰기</button>
+      <span class="top-date" id="pitchDate"></span>
     </div>
 
-    <div class="form-total">
-      <div class="balls" id="formBalls"></div>
-      <div><span class="form-word" id="formWord"></span></div>
-    </div>
-
-    <div class="f-card">
-      <div class="f-top">
-        <span class="f-label">🔥 오늘의 폼 <span class="k">총운</span></span>
-        <span class="f-balls" id="bTotal"></span>
+    <!-- 히어로: 오늘의 럭키 거너 카드 -->
+    <div class="hero" id="hero">
+      <div class="hero-title">
+        <span class="en">TODAY'S LUCKY GOONER</span>
+        <span class="ko">오늘의 럭키 거너</span>
+        <div class="who" id="heroWho">카드를 탭해서 오늘의 선수를 확인해봐</div>
       </div>
-      <p class="f-text" id="tTotal"></p>
-    </div>
 
-    <div class="f-card">
-      <div class="f-top">
-        <span class="f-label">💘 케미스트리 <span class="k">애정운</span></span>
-        <span class="f-balls" id="bLove"></span>
-      </div>
-      <p class="f-text" id="tLove"></p>
-    </div>
-
-    <div class="f-card">
-      <div class="f-top">
-        <span class="f-label">💰 이적시장 운 <span class="k">금전운</span></span>
-        <span class="f-balls" id="bMoney"></span>
-      </div>
-      <p class="f-text" id="tMoney"></p>
-    </div>
-
-    <div class="f-card">
-      <div class="f-top">
-        <span class="f-label">⚡ 압박 강도 <span class="k">일 · 공부운</span></span>
-        <span class="f-balls" id="bWork"></span>
-      </div>
-      <p class="f-text" id="tWork"></p>
-    </div>
-
-    <!-- 럭키 거너 뽑기 -->
-    <div class="draw-zone">
-      <p class="draw-title">🎴 오늘의 럭키 거너</p>
       <div class="flip-box">
         <div class="flip-inner" id="flipCard" onclick="flipCard()">
           <div class="card-face card-back-face">
-            <svg width="90" height="44" viewBox="0 0 120 58" fill="none">
-              <path d="M12 26 L88 16 L104 19 L104 28 L88 26 L12 36 Z" fill="#d4af37"/>
-              <circle cx="42" cy="42" r="13" stroke="#d4af37" stroke-width="5" fill="none"/>
-              <circle cx="42" cy="42" r="3.5" fill="#d4af37"/>
+            <svg width="100" height="48" viewBox="0 0 120 58" fill="none">
+              <path d="M12 26 L88 16 L104 19 L104 28 L88 26 L12 36 Z" fill="#f0d98c"/>
+              <circle cx="42" cy="42" r="13" stroke="#f0d98c" stroke-width="5" fill="none"/>
+              <circle cx="42" cy="42" r="3.5" fill="#f0d98c"/>
             </svg>
             <span class="q">WHO IS IT?</span>
-            <span class="tap">카드를 탭해서 확인해봐</span>
+            <span class="tap">탭해서 공개 👆</span>
           </div>
           <div class="card-face card-front-face" id="cardFront">
-            <div class="p-photo-zone">
+            <div class="shine"></div>
+            <div class="p-photo-zone" id="photoZone">
               <span class="p-badge" id="pBadge"></span>
               <span class="p-num" id="pNum"></span>
-              <img id="pImg" alt="" onerror="photoFallback(this)">
+              <img id="pImg" alt="">
             </div>
             <div class="p-info">
               <div class="p-name" id="pName"></div>
@@ -553,25 +632,76 @@
           </div>
         </div>
       </div>
+
       <p class="p-cheer" id="pCheer"></p>
+      <button class="scroll-cue" id="scrollCue" onclick="document.getElementById('fortune').scrollIntoView({behavior:'smooth'})">
+        오늘 운세 보러 가기 <span class="arrow">▼</span>
+      </button>
     </div>
 
-    <div class="lucky-grid">
-      <div class="lucky-item">
-        <div class="k">행운의 등번호</div>
-        <div class="v" id="luckyNum"></div>
+    <!-- 운세 본문 -->
+    <div id="fortune">
+      <div class="greet">
+        <p class="hello" id="hello"></p>
       </div>
-      <div class="lucky-item">
-        <div class="k">행운의 색</div>
-        <div class="v" id="luckyColor"></div>
+
+      <div class="form-total">
+        <div class="balls" id="formBalls"></div>
+        <div><span class="form-word" id="formWord"></span></div>
       </div>
-      <div class="lucky-item">
-        <div class="k">행운의 아이템</div>
-        <div class="v" id="luckyItem"></div>
+
+      <div class="f-card">
+        <div class="f-top">
+          <span class="f-label">🔥 오늘의 폼 <span class="k">총운</span></span>
+          <span class="f-balls" id="bTotal"></span>
+        </div>
+        <p class="f-text" id="tTotal"></p>
+      </div>
+
+      <div class="f-card">
+        <div class="f-top">
+          <span class="f-label">💘 케미스트리 <span class="k">애정운</span></span>
+          <span class="f-balls" id="bLove"></span>
+        </div>
+        <p class="f-text" id="tLove"></p>
+      </div>
+
+      <div class="f-card">
+        <div class="f-top">
+          <span class="f-label">💰 이적시장 운 <span class="k">금전운</span></span>
+          <span class="f-balls" id="bMoney"></span>
+        </div>
+        <p class="f-text" id="tMoney"></p>
+      </div>
+
+      <div class="f-card">
+        <div class="f-top">
+          <span class="f-label">⚡ 압박 강도 <span class="k">일 · 공부운</span></span>
+          <span class="f-balls" id="bWork"></span>
+        </div>
+        <p class="f-text" id="tWork"></p>
+      </div>
+
+      <div class="lucky-grid">
+        <div class="lucky-item">
+          <div class="k">행운의 등번호</div>
+          <div class="v" id="luckyNum"></div>
+        </div>
+        <div class="lucky-item">
+          <div class="k">행운의 색</div>
+          <div class="v" id="luckyColor"></div>
+        </div>
+        <div class="lucky-item">
+          <div class="k">행운의 아이템</div>
+          <div class="v" id="luckyItem"></div>
+        </div>
+      </div>
+
+      <div class="mission">
+        <span class="m-label">TODAY'S MISSION</span>
+        <span id="missionText"></span>
       </div>
     </div>
-
-    <div class="one-line" id="oneLine"></div>
   </section>
 
   <footer>
@@ -582,163 +712,163 @@
 
 <script>
 /* ===================== 선수 데이터 =====================
-   사진: Sofascore 공개 이미지. 챈트는 실제 팬 챈트만 '챈트' 라벨,
-   나머지는 '오늘의 응원' 라벨로 구분. */
+   tier: legend(골드 홀로) / star(블랙 스페셜) / standard(레드)
+   사진: Sofascore 공개 이미지. 실제 팬 챈트만 '챈트' 라벨. */
 const PLAYERS = [
-  { id: 934235, name: '부카요 사카', en: 'BUKAYO SAKA', num: 7, pos: 'FW',
+  { id: 934235, name: '부카요 사카', en: 'BUKAYO SAKA', num: 7, pos: 'FW', tier: 'star',
     chant: 'Running down the wing, Saka!\nHear the Arsenal sing, Saka!\nWe are gonna win the league!',
     real: true,
-    cheer: '윙을 달리는 사카처럼, 오늘 너의 오른쪽 길은 전부 열려 있어. 스타보이의 기운 받아 가.' },
-  { id: 547410, name: '마르틴 외데고르', en: 'MARTIN ØDEGAARD', num: 8, pos: 'MF · 주장',
+    cheer: '사카는 막혀도 같은 쪽으로 다시 돌파해. 오늘 한 번 안 된 일이 있으면 방법 바꾸지 말고 한 번 더 그대로 부딪쳐봐. 두 번째에 뚫린다.' },
+  { id: 547410, name: '마르틴 외데고르', en: 'MARTIN ØDEGAARD', num: 8, pos: 'MF · 주장', tier: 'star',
     chant: 'Been dreaming all day\nof our number eight,\nMartin Ødegaard, oi oi oi!',
     real: true,
-    cheer: '주장의 침착함이 오늘 너에게 필요해. 서두르지 말고, 외데고르처럼 템포를 네가 쥐는 거야.' },
-  { id: 856714, name: '데클런 라이스', en: 'DECLAN RICE', num: 41, pos: 'MF',
+    cheer: '주장 카드가 나온 날엔 네가 정리할 차례야. 미뤄둔 결정이 있으면 오늘 점심 전에 정해버려. 끌수록 피곤해지는 일이었어.' },
+  { id: 856714, name: '데클런 라이스', en: 'DECLAN RICE', num: 41, pos: 'MF', tier: 'star',
     chant: 'Rice, Rice, Baby! 🎵\n(Ice Ice Baby 버전)',
     real: true,
-    cheer: '프리킥 두 방의 그 날처럼, 오늘 너에게도 한 방이 있어. Rice Rice Baby 흥얼거리면서 가자.' },
-  { id: 836705, name: '카이 하베르츠', en: 'KAI HAVERTZ', num: 29, pos: 'FW',
+    cheer: '프리킥 두 방을 꽂은 그날처럼, 오늘 너한테 기회가 두 번 와. 첫 번째를 놓쳐도 두 번째가 있으니까 아까워하지 말고 바로 다음 준비해.' },
+  { id: 836705, name: '카이 하베르츠', en: 'KAI HAVERTZ', num: 29, pos: 'FW', tier: 'star',
     chant: 'Tsamina mina eh eh,\nWaka Waka eh eh,\n60 million down the drain,\nKai Havertz scored again!',
     real: true,
-    cheer: '의심을 응원으로 바꾼 남자. 누가 뭐래도 너의 페이스로 가면 결국 골은 들어가.' },
-  { id: 941168, name: '윌리암 살리바', en: 'WILLIAM SALIBA', num: 2, pos: 'DF',
+    cheer: '하베르츠는 욕먹던 시즌에도 매일 같은 훈련을 했고 결국 다 뒤집었어. 오늘 누가 뭐라 해도 하던 거 그대로 해. 결과로 답하는 날이 온다.' },
+  { id: 941168, name: '윌리암 살리바', en: 'WILLIAM SALIBA', num: 2, pos: 'DF', tier: 'star',
     chant: 'Doo doo doo doo doo doo —\nSaliba! 🎵',
     real: true,
-    cheer: '살리바가 뒤에 있으면 든든하잖아. 오늘 무슨 일이 와도 너의 수비라인은 안 뚫려.' },
-  { id: 804508, name: '빅토르 죄케레시', en: 'VIKTOR GYÖKERES', num: 14, pos: 'FW',
+    cheer: '살리바가 있으면 뒷문 걱정을 안 하잖아. 오늘은 새 일 벌이지 말고 지금 가진 것들 단단하게 지키는 데 집중해. 그거면 이기는 날이야.' },
+  { id: 804508, name: '빅토르 죄케레시', en: 'VIKTOR GYÖKERES', num: 14, pos: 'FW', tier: 'star',
     chant: "He's scoring goals with\nthe cannon on his chest,\nhis name is Viktor,\nViktor Gyökeres!",
     real: true,
-    cheer: '가슴에 캐논을 달고 골을 넣는 남자의 기세. 오늘은 마스크 셀레브레이션 준비해도 돼.' },
-  { id: 869792, name: '가브리엘 마갈량이스', en: 'GABRIEL', num: 6, pos: 'DF',
+    cheer: '죄케레시는 기회가 오면 무조건 슛부터 때려. 오늘 하고 싶은 말이나 해보고 싶은 게 있으면 재지 말고 질러. 골은 때려야 들어가.' },
+  { id: 869792, name: '가브리엘 마갈량이스', en: 'GABRIEL', num: 6, pos: 'DF', tier: 'standard',
     chant: '코너킥이 올라가면\n모두가 가브리엘을 본다.',
     real: false,
-    cheer: '세트피스의 사나이. 오늘 기회가 한 번 떠오르면 그건 네 헤더야, 놓치지 마.' },
-  { id: 581310, name: '다비드 라야', en: 'DAVID RAYA', num: 1, pos: 'GK',
+    cheer: '가브리엘은 세트피스 한 방으로 경기를 끝내. 오늘 네가 잘하는 그 한 가지로 승부 봐. 여러 개 벌이지 말고 제일 자신 있는 걸로.' },
+  { id: 581310, name: '다비드 라야', en: 'DAVID RAYA', num: 1, pos: 'GK', tier: 'standard',
     chant: '골든글러브는\n그냥 받는 게 아니다.',
     real: false,
-    cheer: '라야의 선방처럼, 오늘 위기가 와도 결국 다 막아낼 수 있어. 손끝 하나 차이로 이기는 날.' },
-  { id: 922573, name: '가브리엘 마르티넬리', en: 'GABRIEL MARTINELLI', num: 11, pos: 'FW',
+    cheer: '라야는 90분 중 89분을 기다리다가 결정적인 1분에 경기를 살려. 오늘 지루한 시간이 길어도 집중 놓지 마. 너의 1분이 온다.' },
+  { id: 922573, name: '가브리엘 마르티넬리', en: 'GABRIEL MARTINELLI', num: 11, pos: 'FW', tier: 'standard',
     chant: '치고 달리면\n아무도 못 잡는다.',
     real: false,
-    cheer: '마르티넬리 스피드로 치고 나가는 날. 망설이는 순간 수비가 따라붙으니까, 오늘은 일단 달려.' },
-  { id: 135666, name: '레안드로 트로사르', en: 'LEANDRO TROSSARD', num: 19, pos: 'FW',
+    cheer: '마르티넬리는 생각보다 발이 먼저 나가. 오늘 할까 말까 고민되는 건 일단 시작부터 해. 시작하면 끝나 있는 날이야.' },
+  { id: 135666, name: '레안드로 트로사르', en: 'LEANDRO TROSSARD', num: 19, pos: 'FW', tier: 'standard',
     chant: '교체로 들어와서\n경기를 끝내는 남자.',
     real: false,
-    cheer: '슈퍼서브 트로사르처럼, 늦게 시작해도 괜찮아. 마지막에 결정짓는 사람이 진짜 주인공이야.' },
-  { id: 864921, name: '에베레치 에제', en: 'EBERECHI EZE', num: 10, pos: 'MF',
+    cheer: '트로사르는 후반 70분에 들어와서 골 넣는 선수야. 오늘 늦게 시작한 일이 있어도 조급해하지 마. 늦게 들어가서 끝내면 돼.' },
+  { id: 864921, name: '에베레치 에제', en: 'EBERECHI EZE', num: 10, pos: 'MF', tier: 'standard',
     chant: '더비에서 해트트릭,\n10번은 아무나 다는 게 아니지.',
     real: false,
-    cheer: '에제의 발끝처럼 부드럽게, 그러나 결정적으로. 오늘 너의 한 수가 분위기를 바꾼다.' },
-  { id: 966837, name: '마르틴 수비멘디', en: 'MARTÍN ZUBIMENDI', num: 36, pos: 'MF',
+    cheer: '에제는 어릴 때 방출당하고도 다시 올라와서 10번을 달았어. 오늘 안 풀리는 게 있어도 그건 끝이 아니라 중간이야. 계속 가.' },
+  { id: 966837, name: '마르틴 수비멘디', en: 'MARTÍN ZUBIMENDI', num: 36, pos: 'MF', tier: 'standard',
     chant: '티 안 나게\n제일 중요한 일을 하는 선수.',
     real: false,
-    cheer: '수비멘디처럼 묵묵히 중심을 잡는 날. 화려하지 않아도 네가 있어서 오늘이 굴러가는 거야.' },
-  { id: 958959, name: '유리언 팀버르', en: 'JURRIËN TIMBER', num: 12, pos: 'DF',
+    cheer: '수비멘디가 잘한 날은 하이라이트에 안 나와도 팀이 이겨. 오늘 네가 한 일을 아무도 몰라줘도 기록은 남아. 묵묵히 쌓는 날이야.' },
+  { id: 958959, name: '유리언 팀버르', en: 'JURRIËN TIMBER', num: 12, pos: 'DF', tier: 'standard',
     chant: '한번 붙으면\n절대 안 떨어진다.',
     real: false,
-    cheer: '팀버르의 일대일 수비처럼, 오늘 너한테 붙는 행운은 안 떨어져. 끝까지 물고 가.' },
-  { id: 846036, name: '벤 화이트', en: 'BEN WHITE', num: 4, pos: 'DF',
+    cheer: '팀버르는 부상으로 한 시즌을 통째로 날리고도 더 강해져서 돌아왔어. 오늘 컨디션이 안 좋아도 괜찮아. 쉬는 것도 다음 경기 준비야.' },
+  { id: 846036, name: '벤 화이트', en: 'BEN WHITE', num: 4, pos: 'DF', tier: 'standard',
     chant: '조용히, 그러나\n빈틈없이.',
     real: false,
-    cheer: '벤 화이트처럼 묵묵하게 내 자리 지키는 것만으로도 충분히 잘하고 있는 날이야.' },
+    cheer: '벤 화이트는 인터뷰도 SNS도 잘 안 하지만 매 경기 자기 몫을 해. 오늘은 보여주기용 말고 진짜 해야 할 일만 골라서 해.' },
   /* ---------- 레전드 ---------- */
-  { id: 11, name: '티에리 앙리', en: 'THIERRY HENRY', num: 14, pos: 'LEGEND',
+  { id: 11, name: '티에리 앙리', en: 'THIERRY HENRY', num: 14, pos: 'LEGEND', tier: 'legend',
     chant: '하이버리의 왕.\n설명이 필요 없는 이름.',
-    real: false, legend: true,
-    cheer: '레전드 카드가 나왔다는 건 오늘이 보통 날이 아니라는 뜻. 앙리의 우아함으로 하루를 지배해.' },
-  { id: 8, name: '데니스 베르캄프', en: 'DENNIS BERGKAMP', num: 10, pos: 'LEGEND',
+    real: false,
+    cheer: '레전드 중의 레전드, 앙리 카드야. 오늘은 아껴둔 걸 쓰는 날 — 아껴둔 옷, 아껴둔 말, 아껴둔 계획. 제일 좋은 카드를 오늘 꺼내.' },
+  { id: 8, name: '데니스 베르캄프', en: 'DENNIS BERGKAMP', num: 10, pos: 'LEGEND', tier: 'legend',
     chant: 'Walking in a\nBergkamp Wonderland 🎵',
-    real: true, legend: true,
-    cheer: '뉴캐슬전 그 턴처럼, 오늘 막힌 문제도 한 번의 발상 전환으로 풀린다. 원더랜드를 걷는 날.' },
-  { id: 3, name: '파트리크 비에이라', en: 'PATRICK VIEIRA', num: 4, pos: 'LEGEND',
+    real: true,
+    cheer: '뉴캐슬전 그 턴은 베르캄프가 공 받기 전에 이미 다 계산한 거였어. 오늘 일이 막히면 정면 말고 한 바퀴 돌아서 가봐. 그 길이 더 빨라.' },
+  { id: 3, name: '파트리크 비에이라', en: 'PATRICK VIEIRA', num: 4, pos: 'LEGEND', tier: 'legend',
     chant: 'Vieira, whoa-oh-oh-oh!\nHe comes from Senegal,\nhe plays for Arsenal! 🎵',
-    real: true, legend: true,
-    cheer: '무패우승 주장의 카드야. 오늘 어떤 싸움이 와도 중원은 네가 접수한다.' },
-  { id: 0, name: '이안 라이트', en: 'IAN WRIGHT', num: 8, pos: 'LEGEND',
+    real: true,
+    cheer: '무패우승 시즌의 주장 카드야. 그 시즌 아스날은 지는 날에도 비기면서 버텼어. 오늘 완벽하지 않아도 돼. 무너지지만 않으면 이기는 거야.' },
+  { id: 0, name: '이안 라이트', en: 'IAN WRIGHT', num: 8, pos: 'LEGEND', tier: 'legend',
     chant: 'Ian Wright Wright Wright! 🎵',
-    real: true, legend: true,
-    cheer: '골 넣고 웃는 게 제일 멋있는 남자. 오늘은 뭘 하든 신나게, 라이트처럼 활짝 웃으면서 해.' }
+    real: true,
+    cheer: '라이트는 골 넣으면 세상에서 제일 신나게 웃는 선수였어. 오늘 좋은 일이 생기면 참지 말고 티 내. 자랑할 사람한테 바로 연락해.' }
 ];
 
-/* ===================== 운세 텍스트 ===================== */
+/* ===================== 운세 텍스트 — 전부 구체적인 행동/시간/숫자로 ===================== */
 const TEXT = {
   total: {
     hi: [
-      '리그 연승 가도 달리던 그 기세가 오늘 너한테 온다. 미뤄둔 일 꺼내기 딱 좋은 날, 전반 초반에 선제골 넣듯 오전에 시작해.',
-      '홈 경기 같은 하루. 주변이 다 네 편이고, 부탁할 일이 있으면 오늘이 적기야.',
-      '인저리 타임 극장골 같은 반전이 기다리는 날. 끝났다고 생각한 일에서 좋은 소식이 와.',
-      '클린시트에 멀티골, 완승 각본의 하루. 망설이던 결정은 마음 가는 쪽으로 질러도 돼.'
+      '미뤄둔 일 중에 제일 부담스러운 거 하나를 오전에 끝내봐. 오늘은 시작만 하면 막힘없이 끝까지 가는 날이야.',
+      '부탁할 일이 있으면 오늘 점심 전에 말 꺼내. 오늘따라 사람들이 네 부탁을 잘 들어주는 날이야.',
+      '연락 끊긴 지 오래된 친구한테 먼저 메시지 보내봐. 반가운 근황이랑 좋은 소식이 같이 딸려 온다.',
+      '오늘은 첫 직감이 정답인 날. 메뉴든 물건이든 일이든, 처음 끌린 걸로 골라. 두 번 고민하면 오히려 꼬여.'
     ],
     mid: [
-      '점유율은 높은데 골이 좀 늦게 터지는 날. 조급해하지 말고 패스 돌리다 보면 후반에 풀린다.',
-      '무난한 0-0 전반전 같은 오전, 오후부터 템포가 올라와. 중요한 일은 점심 이후로.',
-      '큰 위기도 큰 찬스도 없는 날. 이런 날 승점 1점 챙기는 팀이 우승하는 거야.',
-      '로테이션 데이. 풀파워 안 내도 되니까 체력 아끼면서 가볍게 굴러가자.'
+      '오전엔 일이 더디게 풀려도 오후 2시 넘으면 속도가 붙어. 중요한 일정은 오후에 배치해.',
+      '오늘은 새 일을 벌이지 말고 하던 것만 마무리해. 끝낸 일 개수가 쌓이는 게 오늘의 승점이야.',
+      '점심 메뉴를 평소에 안 먹던 걸로 골라봐. 그 작은 변화 하나가 처지는 오후를 살려준다.',
+      '오늘은 무리해서 풀파워 낼 필요 없는 로테이션 데이. 평소의 80%만 해도 충분한 하루야.'
     ],
     low: [
-      '원정 일정 같은 하루. 무리하게 라인 올리지 말고 단단하게 버티면, 내일부터 홈 2연전이야.',
-      'VAR 판독처럼 일이 한 번씩 멈출 수 있는 날. 짜증 내지 말고 판정 기다리듯 한 템포 쉬어가.',
-      '컨디션 난조면 무리한 선발 출전보다 벤치 스타트가 답. 오늘은 나를 아끼는 날로 쓰자.'
+      '오늘은 약속을 늘리지 말고 일찍 들어가는 날. 밤 11시 전에 자면 내일 컨디션이 두 배로 돌아와.',
+      '중요한 이야기는 문자 말고 전화나 얼굴 보고 해. 오늘은 글로 보내면 오해가 생기기 쉬운 날이야.',
+      '오늘 하루는 몸 챙기는 데 써. 따뜻한 거 먹고, 어깨 스트레칭 한 번 하고, 일찍 쉬면 그걸로 이긴 거야.'
     ]
   },
   love: {
     hi: [
-      '외데고르가 찔러주고 사카가 마무리하는 그 호흡이 둘 사이에 흐르는 날. 말 안 해도 통한다.',
-      '오늘 데이트는 짧아도 하이라이트 영상감. 사진 많이 찍어둬, 두고두고 돌려보게 될 거야.',
-      '평소에 못 하던 말 꺼내기 좋은 날. 생각보다 훨씬 따뜻한 답이 돌아와.'
+      '보고 싶으면 오늘은 네가 먼저 말해. "보고 싶다" 다섯 글자에 상대도 똑같이 생각하고 있었다는 답이 온다.',
+      '둘이 찍은 사진 중에 제일 웃긴 거 하나 골라서 보내봐. 그 사진 하나로 한 시간은 웃으면서 대화하게 돼.',
+      '고마웠던 일 하나만 콕 집어서 말해줘. "그때 그거 진짜 고마웠어" 한마디면 오늘 분위기는 끝나.'
     ],
     mid: [
-      '화려한 공격 축구보다 안정적인 빌드업이 어울리는 날. 손잡고 동네 한 바퀴면 충분해.',
-      '상대 말투에 너무 의미 두지 않아도 돼. 피곤해서 그런 거지 마음은 풀타임 그대로야.',
-      '먼저 연락하는 쪽이 이기는 날. 별일 없어도 "뭐 해?" 한 통이면 경기 풀린다.'
+      '오늘 데이트는 멀리 말고 가까운 데서. 손잡고 동네 한 바퀴 걷고 아이스크림 하나면 충분한 날이야.',
+      '답장이 늦어도 재촉하지 말고 기다려. 바빠서 그런 거고, 저녁엔 평소보다 긴 답장이 온다.',
+      '먼저 연락하는 쪽이 이기는 날. 용건 없어도 "뭐 해?" 한 통이면 오늘 대화가 풀린다.'
     ],
     low: [
-      '서로 카드 관리가 필요한 날. 괜한 태클은 옐로 나오니까, 장난도 한 템포 쉬어가기.',
-      '기대가 크면 서운함도 큰 법. 오늘은 받으려 하지 말고 먼저 건네는 쪽이 마음 편해.'
+      '오늘은 장난으로라도 놀리는 말 금지. 평소엔 웃고 넘기는 말도 오늘은 서운하게 들리는 날이야.',
+      '서운한 게 생기면 오늘 말고 내일 이야기해. 하루만 묵히면 절반은 별일 아니었다는 걸 알게 돼.'
     ]
   },
   money: {
     hi: [
-      '이적시장 대박 영입 같은 날. 잊고 있던 환급금, 포인트, 페이백 한 번 싹 확인해봐.',
-      '쓴 만큼 돌아오는 날이라, 좋아하는 사람을 위한 지출은 아끼지 않아도 돼.',
-      '눈여겨보던 물건이 좋은 가격에 풀릴 수 있는 날. 단, 결제 전에 최저가 비교 두 번.'
+      '카드 캐시백, 앱 포인트, 안 쓴 기프티콘 오늘 다 확인해봐. 잊고 있던 돈이 생각보다 많이 나온다.',
+      '오늘 좋아하는 사람을 위해 쓰는 돈은 아끼지 마. 금액보다 타이밍이 좋은 날이라 두 배로 기억에 남아.',
+      '찜해둔 물건이 있으면 오늘 가격을 확인해봐. 세일에 들어갔거나 쿠폰이 풀렸을 확률이 높아.'
     ],
     mid: [
-      '들어올 돈도 나갈 돈도 평범한 날. 커피 한 잔 정도의 소비로 기분 전환하면 딱 좋아.',
-      '장바구니에 하루만 묵혀두기. 내일 보면 절반은 안 사도 되는 것들이야.'
+      '오늘 배달 한 번만 줄여봐. 그 돈으로 내일 아침 좋아하는 커피를 사는 게 오늘의 최적 소비야.',
+      '장바구니에 담은 건 24시간 뒤에 다시 봐. 내일도 사고 싶으면 그때 사도 안 늦어.'
     ],
     low: [
-      '오버페이 경고등 켜진 날. 바이아웃 조항 없는 큰 결제는 하루만 미루자.',
-      '오늘은 셀링 클럽 모드. 안 쓰는 물건 정리하면 오히려 들어오는 돈이 생긴다.'
+      '오늘 5만원 넘는 결제는 전부 내일로 미뤄. 하루 지나면 안 사도 됐다는 걸 알게 되는 날이야.',
+      '오늘은 돈 계산 확실하게 하는 날. 더치페이 애매하게 넘기지 말고 그 자리에서 정리해.'
     ]
   },
   work: {
     hi: [
-      '하이프레스 풀가동하는 날. 제일 어려운 일부터 압박해서 끊어내면 오전에 승부 끝난다.',
-      '아이디어가 에제 드리블처럼 살아 움직이는 날. 떠오르는 건 사소해도 다 메모해둬.',
-      '쌓아온 노력이 감독 눈에 들어오는 날. 칭찬받으면 겸손 반, 미소 반으로 받아주기.'
+      '출근하자마자 제일 어려운 일부터 잡아. 오전 10시까지의 집중력이 오늘 하루치 일의 절반을 끝내준다.',
+      '오늘 떠오르는 아이디어는 그 자리에서 바로 메모해. 오늘 적은 메모 하나가 다음 주에 큰 건을 해결해줘.',
+      '오늘 한 일은 퇴근 전에 한 줄이라도 정리해서 공유해. 윗사람이 유심히 보고 있는 날이야.'
     ],
     mid: [
-      '할 일이 많아도 한 번에 하나씩. 멀티태스킹보다 짧은 패스 연결이 빠른 날이야.',
-      '후반 60분쯤 집중력이 떨어질 수 있어. 달콤한 간식 하나가 교체 카드 역할을 해준다.'
+      '오늘 할 일은 딱 세 개만 골라서 그것만 끝내. 다 하려고 벌이면 하나도 못 끝내는 날이야.',
+      '오후 3시쯤 집중력 떨어질 때 초콜릿 하나 먹고 10분 걸어. 남은 두 시간의 효율이 달라진다.'
     ],
     low: [
-      '백패스 실수 나오기 쉬운 날. 보내기 전에 한 번만 더 읽어보면 그게 클린시트를 지킨다.',
-      '머리가 무거우면 10분 산책이 답. 하프타임 없이 풀타임 뛰는 선수는 없어.'
+      '오늘 보내는 메일과 메시지는 전송 전에 딱 한 번씩만 다시 읽어. 오타 하나가 일을 두 배로 만드는 날이야.',
+      '30분 넘게 막히는 일은 붙잡지 말고 내일 아침으로 넘겨. 자고 일어나면 10분 만에 풀리는 문제였어.'
     ]
   },
-  oneLine: [
-    '"북런던은 영원히 빨갛고,\n내일의 너는 오늘보다 빛나."',
-    '"좋은 일은 좋은 사람에게 와.\n승점 3점처럼 확실하게."',
-    '"불리한 전반전은 잊어.\n역전은 후반에 나오는 거야."',
-    '"네 페이스대로 가.\n우승하는 팀은 서두르지 않아."',
-    '"오늘 밤 푹 자.\n내일은 너의 홈경기니까."',
-    '"네가 웃으면\n에미레이츠도 만석이야."',
-    '"걱정은 전반에 두고 와.\n우리한텐 아직 45분이 있어."',
-    '"폼은 일시적이지만\n클래스는 영원해. 너처럼."'
+  missions: [
+    '자기 전에 아스날 골 모음 영상 1개 보기. 기분 올리는 데 3분이면 충분해.',
+    '오늘 물 6잔 마시기. 선수들도 경기 전엔 수분부터 챙겨.',
+    '좋아하는 노래 3곡 들으면서 10분 걷기. 오늘의 회복 훈련이야.',
+    '오늘 제일 웃겼던 일 하나 메모해두기. 나중에 둘이 같이 보면 또 웃어.',
+    '책상 위 안 쓰는 물건 3개 치우기. 자리가 깨끗하면 폼도 올라와.',
+    '빨간 거 하나 몸에 지니고 나가기. 양말이든 머리끈이든 립이든.',
+    '오늘 하늘이나 커피, 아무거나 사진 한 장 찍어두기. 오늘이 기억나게.',
+    '저녁에 스트레칭 5분. 종아리부터 어깨까지, 선수들 회복 루틴처럼.'
   ],
   colors: [
-    ['아스날 레드', '#EF0107'], ['인빈서블 골드', '#d4af37'], ['어웨이 네이비', '#063672'],
+    ['아스날 레드', '#EF0107'], ['크레스트 골드', '#d4af37'], ['어웨이 네이비', '#023474'],
     ['크림 화이트', '#fdf6e9'], ['민트', '#9fe6c8'], ['라벤더', '#b69cff'],
     ['로즈 핑크', '#f5a0b9'], ['버터 옐로우', '#f5dd8a'], ['스카이 블루', '#a5d8f7'], ['피치', '#f7c4a5']
   ],
@@ -771,7 +901,7 @@ function dateKey(d) {
   return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
 }
 
-function buildFortune(name, birth) {
+function buildFortune(name, birth, forcePlayer) {
   const today = new Date();
   const rng = mulberry32(hashSeed(dateKey(today) + '|' + birth + '|' + name));
 
@@ -785,7 +915,8 @@ function buildFortune(name, birth) {
   function tier(s) { return s >= 4 ? 'hi' : s === 3 ? 'mid' : 'low'; }
 
   const sT = score(), sL = score(), sM = score(), sW = score();
-  const player = pick(PLAYERS);
+  let player = pick(PLAYERS);
+  if (forcePlayer !== null && PLAYERS[forcePlayer]) player = PLAYERS[forcePlayer];
 
   return {
     scores: { total: sT, love: sL, money: sM, work: sW },
@@ -801,18 +932,19 @@ function buildFortune(name, birth) {
       color: pick(TEXT.colors),
       item: pick(TEXT.items)
     },
-    oneLine: pick(TEXT.oneLine)
+    mission: pick(TEXT.missions)
   };
 }
 
 /* ===================== 렌더링 ===================== */
 const WEEK = ['일', '월', '화', '수', '목', '금', '토'];
 const FORM_WORD = { 5: 'WORLD CLASS', 4: 'ON FIRE', 3: 'SOLID', 2: 'ROTATION DAY' };
+let currentPlayer = null;
 
 function fmtDate(d) {
   return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일 (' + WEEK[d.getDay()] + ')';
 }
-function ballHtml(n, size) {
+function ballHtml(n) {
   let out = '';
   for (let i = 0; i < 5; i++) out += i < n ? '⚽' : '<span class="off">⚽</span>';
   return out;
@@ -830,16 +962,17 @@ function enter() {
     localStorage.setItem('gName', name);
     localStorage.setItem('gBirth', birth);
   } catch (e) {}
-  showFortune(name, birth);
+  showFortune(name, birth, null);
 }
 
-function showFortune(name, birth) {
-  const f = buildFortune(name, birth);
+function showFortune(name, birth, forcePlayer) {
+  const f = buildFortune(name, birth, forcePlayer);
   const today = new Date();
+  currentPlayer = f.player;
 
+  document.getElementById('pitchDate').textContent = fmtDate(today);
   document.getElementById('hello').innerHTML =
-    (name ? '<b>' + escapeHtml(name) + '</b> 구너님, ' : '구너님, ') + '오늘의 매치 프리뷰 도착! 📋';
-  document.getElementById('pitchDate').textContent = fmtDate(today) + ' · KICK-OFF';
+    (name ? '<b>' + escapeHtml(name) + '</b> 구너님의 ' : '') + '오늘의 매치 프리뷰 📋';
 
   document.getElementById('formBalls').innerHTML = ballHtml(f.scores.total);
   document.getElementById('formWord').textContent = 'FORM : ' + FORM_WORD[f.scores.total];
@@ -860,64 +993,94 @@ function showFortune(name, birth) {
   document.getElementById('luckyColor').innerHTML =
     '<span class="color-dot" style="background:' + f.lucky.color[1] + '"></span>' + f.lucky.color[0];
   document.getElementById('luckyItem').textContent = f.lucky.item;
-
-  document.getElementById('oneLine').textContent = f.oneLine;
+  document.getElementById('missionText').textContent = f.mission;
 
   document.getElementById('gate').style.display = 'none';
   document.getElementById('pitch').style.display = 'block';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0, behavior: 'auto' });
 }
 
 function renderPlayer(p) {
-  /* 카드 초기화 (다시 입장했을 때 뒤집힘 상태 리셋) */
+  const hero = document.getElementById('hero');
+  hero.classList.remove('reveal-standard', 'reveal-star', 'reveal-legend');
   document.getElementById('flipCard').classList.remove('flipped');
   document.getElementById('pCheer').classList.remove('show');
+  document.getElementById('scrollCue').classList.remove('show');
+  document.getElementById('heroWho').textContent = '카드를 탭해서 오늘의 선수를 확인해봐';
+  hero.querySelectorAll('.spark').forEach(function (s) { s.remove(); });
 
   const front = document.getElementById('cardFront');
-  front.classList.toggle('legend', !!p.legend);
+  front.classList.remove('t-standard', 't-star', 't-legend');
+  front.classList.add('t-' + p.tier);
 
-  document.getElementById('pBadge').textContent = p.legend ? '★ LEGEND' : p.pos;
+  document.getElementById('pBadge').textContent =
+    p.tier === 'legend' ? '★ LEGEND' : p.tier === 'star' ? '★ STAR' : 'FIRST TEAM';
   document.getElementById('pNum').textContent = p.num;
   document.getElementById('pName').textContent = p.name;
-  document.getElementById('pNameEn').textContent = p.en + ' · No.' + p.num;
+  document.getElementById('pNameEn').textContent = p.en + ' · NO.' + p.num;
   document.getElementById('pChant').textContent = p.chant;
   document.getElementById('pChantLabel').textContent = p.real ? '— 실제 에미레이츠 챈트 🎵' : '— 오늘의 응원';
   document.getElementById('pCheer').textContent = p.cheer;
 
   const img = document.getElementById('pImg');
-  const old = front.querySelector('.p-fallback');
+  const zone = document.getElementById('photoZone');
+  const old = zone.querySelector('.p-fallback');
   if (old) old.remove();
   img.style.display = '';
-  img.dataset.initial = p.en.split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2);
+  img.onerror = function () { photoFallback(img, p); };
   if (p.id > 0) {
     img.src = 'https://img.sofascore.com/api/v1/player/' + p.id + '/image';
   } else {
-    photoFallback(img);
+    photoFallback(img, p);
   }
 }
 
-function photoFallback(img) {
+function photoFallback(img, p) {
   img.style.display = 'none';
-  const zone = img.parentElement;
+  const zone = document.getElementById('photoZone');
   if (zone.querySelector('.p-fallback')) return;
   const fb = document.createElement('div');
   fb.className = 'p-fallback';
-  fb.textContent = img.dataset.initial || '⚽';
-  zone.appendChild(fb);
+  fb.textContent = p.en.split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2);
+  zone.insertBefore(fb, zone.querySelector('.p-badge'));
 }
 
 function flipCard() {
+  if (!currentPlayer) return;
+  const hero = document.getElementById('hero');
   const card = document.getElementById('flipCard');
+  if (card.classList.contains('flipped')) return;
+
+  hero.classList.add('reveal-' + currentPlayer.tier);
   card.classList.add('flipped');
+  document.getElementById('heroWho').textContent = '';
+
+  /* 등급별 파티클: star = 빨강 6개, legend = 골드 14개 */
+  const count = currentPlayer.tier === 'legend' ? 14 : currentPlayer.tier === 'star' ? 6 : 0;
+  const box = card.parentElement;
+  const delayBase = currentPlayer.tier === 'legend' ? 1.3 : 1.0;
+  for (let i = 0; i < count; i++) {
+    const s = document.createElement('span');
+    s.className = 'spark' + (currentPlayer.tier === 'star' ? ' red' : '');
+    s.textContent = ['✦', '✧', '⭐'][i % 3];
+    s.style.left = (Math.random() * 100) + '%';
+    s.style.top = (10 + Math.random() * 80) + '%';
+    s.style.animationDelay = (delayBase + Math.random() * 1.2) + 's';
+    s.style.fontSize = (10 + Math.random() * 12) + 'px';
+    box.appendChild(s);
+  }
+
+  const wait = currentPlayer.tier === 'legend' ? 1500 : currentPlayer.tier === 'star' ? 1200 : 800;
   setTimeout(function () {
     document.getElementById('pCheer').classList.add('show');
-  }, 650);
+    document.getElementById('scrollCue').classList.add('show');
+  }, wait);
 }
 
 function goGate() {
   document.getElementById('pitch').style.display = 'none';
   document.getElementById('gate').style.display = 'block';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0, behavior: 'auto' });
 }
 
 function escapeHtml(s) {
@@ -929,13 +1092,13 @@ function escapeHtml(s) {
 /* ===================== 초기화 ===================== */
 document.getElementById('gateDate').textContent = fmtDate(new Date()) + ' 발권';
 
-/* URL 파라미터 (?name=..&birth=YYYY-MM-DD) → 즐겨찾기용 바로 입장 */
+/* URL 파라미터: ?name=&birth=YYYY-MM-DD (&player=N&flip=1 은 테스트용) */
 const qs = new URLSearchParams(location.search);
+const forceP = qs.get('player') !== null ? parseInt(qs.get('player'), 10) : null;
 if (qs.get('birth')) {
-  showFortune(qs.get('name') || '', qs.get('birth'));
+  showFortune(qs.get('name') || '', qs.get('birth'), forceP);
   if (qs.get('flip')) flipCard();
 } else {
-  /* 지난번 티켓 정보 자동 입력 */
   try {
     const n = localStorage.getItem('gName'), b = localStorage.getItem('gBirth');
     if (n) document.getElementById('inName').value = n;
