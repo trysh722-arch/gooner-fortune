@@ -48,6 +48,9 @@
     min-height: 100dvh;
     -webkit-font-smoothing: antialiased;
     -webkit-tap-highlight-color: transparent;
+    /* 한글이 단어 중간(음절)에서 안 잘리고 단어 단위로 줄바꿈 */
+    word-break: keep-all;
+    overflow-wrap: break-word;
   }
 
   /* iOS는 background-attachment: fixed 미지원 → 고정 레이어 */
