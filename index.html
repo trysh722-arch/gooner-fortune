@@ -597,8 +597,28 @@
   }
   .p-cheer.show { display: block; animation: fadeUp 0.5s ease both; }
 
+  /* 선수 카드 아래 공유 CTA (뒤집으면 등장) */
+  .share-cta {
+    display: none;
+    margin-top: 18px;
+    background: linear-gradient(180deg, var(--red-bright), var(--red) 60%, #cc0408);
+    color: #fff;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    border: none;
+    border-radius: 13px;
+    padding: 13px 26px;
+    cursor: pointer;
+    box-shadow: 0 8px 22px rgba(239, 1, 7, 0.38);
+    transition: transform 0.15s ease;
+  }
+  .share-cta.show { display: inline-block; animation: fadeUp 0.5s ease 0.1s both; }
+  .share-cta:active { transform: scale(0.97); }
+
   .scroll-cue {
-    margin-top: 20px;
+    margin-top: 16px;
     display: none;
     background: rgba(239, 1, 7, 0.12);
     border: 1px solid rgba(239, 1, 7, 0.55);
@@ -841,6 +861,7 @@
       </div>
 
       <p class="p-cheer" id="pCheer"></p>
+      <button class="share-cta" id="shareBtn" onclick="shareToday()">친구한테 내 카드 공유하기 📤</button>
       <button class="scroll-cue" id="scrollCue" onclick="document.getElementById('fortune').scrollIntoView({behavior:'smooth'})">
         오늘 운세 보러 가기 <span class="arrow">▼</span>
       </button>
@@ -921,8 +942,6 @@
         <span class="m-label">TODAY'S MISSION</span>
         <span id="missionText"></span>
       </div>
-
-      <button class="share-btn" id="shareBtn" onclick="shareToday()">오늘 카드 자랑하기 📤</button>
     </div>
   </section>
 
@@ -1347,6 +1366,7 @@ function renderPlayer(p) {
   hero.classList.remove('reveal-standard', 'reveal-star', 'reveal-legend');
   document.getElementById('flipCard').classList.remove('flipped');
   document.getElementById('pCheer').classList.remove('show');
+  document.getElementById('shareBtn').classList.remove('show');
   document.getElementById('scrollCue').classList.remove('show');
   document.getElementById('heroWho').textContent = '카드를 탭해서 오늘의 선수를 확인해봐';
   hero.querySelectorAll('.spark').forEach(function (s) { s.remove(); });
@@ -1422,6 +1442,7 @@ function flipCard() {
   const wait = t === 'ultra' ? 1700 : t === 'legend' ? 1500 : t === 'manager' ? 1300 : t === 'star' ? 1200 : 800;
   setTimeout(function () {
     document.getElementById('pCheer').classList.add('show');
+    document.getElementById('shareBtn').classList.add('show');
     document.getElementById('scrollCue').classList.add('show');
   }, wait);
 }
@@ -1430,21 +1451,16 @@ function slugOf(p) { return p.img ? p.img.slice(4, -4) : 'wright'; }
 
 function shareToday() {
   if (!currentFortune) return;
-  const f = currentFortune;
-  const balls = '⚽'.repeat(f.scores.total);
-  const text = '오늘 나의 럭키 거너는 ' + f.player.name + ' (No.' + f.player.num + ')!\n'
-    + '오늘의 폼 ' + balls + ' · ' + FORM_WORD[f.scores.total] + '\n'
-    + '너도 너의 카드 뽑아봐 👇';
-  /* 선수별 OG 페이지로 공유 → 카톡 미리보기에 그 선수 카드가 뜸 (B안) */
+  /* 링크만 공유 → 카톡 미리보기 카드가 선수·정보를 다 보여줌 (B안) */
   const base = location.origin + location.pathname.replace(/[^/]*$/, '');
-  const url = base + 'p/' + slugOf(f.player) + '.html';
+  const url = base + 'p/' + slugOf(currentFortune.player) + '.html';
   const btn = document.getElementById('shareBtn');
   if (navigator.share) {
-    navigator.share({ title: '오늘의 구너 운세', text: text, url: url }).catch(function () {});
+    navigator.share({ url: url }).catch(function () {});
   } else if (navigator.clipboard) {
-    navigator.clipboard.writeText(text + '\n' + url).then(function () {
-      btn.textContent = '복사 완료! 붙여넣기만 하면 돼 ✅';
-      setTimeout(function () { btn.textContent = '오늘 카드 자랑하기 📤'; }, 2200);
+    navigator.clipboard.writeText(url).then(function () {
+      btn.textContent = '링크 복사 완료! 붙여넣기만 하면 돼 ✅';
+      setTimeout(function () { btn.textContent = '친구한테 내 카드 공유하기 📤'; }, 2200);
     });
   }
 }
