@@ -7,6 +7,14 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="구너 운세">
+<meta property="og:type" content="website">
+<meta property="og:title" content="오늘의 구너 운세 — COYG 🔴⚪">
+<meta property="og:description" content="생년월일 넣고 오늘의 럭키 거너를 뽑아봐. 매일 자정 새 운세 발매!">
+<meta property="og:image" content="https://trysh722-arch.github.io/gooner-fortune/share/_default.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://trysh722-arch.github.io/gooner-fortune/">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔴</text></svg>">
 <title>오늘의 구너 운세 — COYG</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -949,10 +957,10 @@ const PLAYERS = [
     chant: 'Doo doo doo doo doo doo —\nSaliba! 🎵',
     real: true,
     cheer: '살리바가 있으면 뒷문 걱정을 안 하잖아. 새 일 벌이지 말고 지금 가진 것들만 단단하게 지켜. 그거면 충분히 이긴다.' },
-  { img: 'img/gyokeres.png', name: '빅토르 죄케레시', en: 'VIKTOR GYÖKERES', num: 14, pos: 'FW', tier: 'star',
+  { img: 'img/gyokeres.png', name: '빅토르 요케레스', en: 'VIKTOR GYÖKERES', num: 14, pos: 'FW', tier: 'star',
     chant: "He's scoring goals with\nthe cannon on his chest,\nhis name is Viktor,\nViktor Gyökeres!",
     real: true,
-    cheer: '죄케레시는 기회가 오면 일단 슛부터 때려. 하고 싶은 말이 있으면 재지 말고 질러버려. 골은 때려야 들어간다.' },
+    cheer: '요케레스는 기회가 오면 일단 슛부터 때려. 하고 싶은 말이 있으면 재지 말고 질러버려. 골은 때려야 들어간다.' },
   { img: 'img/gabriel.png', name: '가브리엘 마갈량이스', en: 'GABRIEL', num: 6, pos: 'DF', tier: 'standard',
     chant: '코너킥이 올라가면\n모두가 가브리엘을 본다.',
     real: false,
@@ -973,10 +981,10 @@ const PLAYERS = [
     chant: '더비에서 해트트릭,\n10번은 아무나 다는 게 아니지.',
     real: false,
     cheer: '에제는 어릴 때 방출당하고도 다시 올라와서 10번을 달았어. 지금 안 풀리는 건 끝이 아니라 중간이야. 계속 가면 돼.' },
-  { img: 'img/zubimendi.png', name: '마르틴 수비멘디', en: 'MARTÍN ZUBIMENDI', num: 36, pos: 'MF', tier: 'standard',
+  { img: 'img/zubimendi.png', name: '마르틴 주비멘디', en: 'MARTÍN ZUBIMENDI', num: 36, pos: 'MF', tier: 'standard',
     chant: '티 안 나게\n제일 중요한 일을 하는 선수.',
     real: false,
-    cheer: '수비멘디가 잘한 날은 하이라이트에 안 나와도 팀이 이겨. 네가 한 일을 아무도 몰라줘도 기록은 남는다. 오늘 쌓은 건 어디 안 가.' },
+    cheer: '주비멘디가 잘한 날은 하이라이트에 안 나와도 팀이 이겨. 네가 한 일을 아무도 몰라줘도 기록은 남는다. 오늘 쌓은 건 어디 안 가.' },
   { img: 'img/timber.png', name: '유리언 팀버르', en: 'JURRIËN TIMBER', num: 12, pos: 'DF', tier: 'standard',
     chant: '한번 붙으면\n절대 안 떨어진다.',
     real: false,
@@ -985,6 +993,18 @@ const PLAYERS = [
     chant: '조용히, 그러나\n빈틈없이.',
     real: false,
     cheer: '벤 화이트는 인터뷰도 SNS도 안 하지만 매 경기 자기 몫을 해. 보여주기용 말고 진짜 해야 할 일만 골라서 하자.' },
+  { img: 'img/jesus.png', name: '가브리엘 제수스', en: 'GABRIEL JESUS', num: 9, pos: 'FW', tier: 'star',
+    chant: '침투하고 또 침투해서\n결국 터뜨리는 9번.',
+    real: false,
+    cheer: '제수스는 골 가뭄에도 계속 침투하고 또 침투해서 결국 터뜨려. 지금 결과가 안 나와도 시도를 멈추지 마. 계속 들이대는 사람한테 골이 와.' },
+  { img: 'img/merino.png', name: '미켈 메리노', en: 'MIKEL MERINO', num: 23, pos: 'MF', tier: 'standard',
+    chant: '중원에서도 골,\n급하면 최전방에서도 골.',
+    real: false,
+    cheer: '메리노는 수비형 미드필더인데 급할 땐 최전방 공격수로 올라가서 헤더골을 넣었어. 오늘은 평소 안 하던 역할도 한번 맡아봐. 의외의 데서 네 진가가 나온다.' },
+  { img: 'img/lewisskelly.png', name: '마일스 루이스스켈리', en: 'LEWIS-SKELLY', num: 49, pos: 'DF', tier: 'standard',
+    chant: '유스에서 올라온\n노스런던의 자부심.',
+    real: false,
+    cheer: '루이스스켈리는 18살에 1군에 올라와서 데뷔골까지 넣었어. 어리다고 경험 없다고 주눅 들 거 없어. 기회가 오면 그냥 네 거처럼 잡아.' },
   /* ---------- 레전드 ---------- */
   { img: 'img/henry.png', name: '티에리 앙리', en: 'THIERRY HENRY', num: 14, pos: 'FW', tier: 'legend',
     chant: '하이버리의 왕.\n설명이 필요 없는 이름.',
@@ -1406,6 +1426,8 @@ function flipCard() {
   }, wait);
 }
 
+function slugOf(p) { return p.img ? p.img.slice(4, -4) : 'wright'; }
+
 function shareToday() {
   if (!currentFortune) return;
   const f = currentFortune;
@@ -1413,7 +1435,9 @@ function shareToday() {
   const text = '오늘 나의 럭키 거너는 ' + f.player.name + ' (No.' + f.player.num + ')!\n'
     + '오늘의 폼 ' + balls + ' · ' + FORM_WORD[f.scores.total] + '\n'
     + '너도 너의 카드 뽑아봐 👇';
-  const url = location.origin + location.pathname;
+  /* 선수별 OG 페이지로 공유 → 카톡 미리보기에 그 선수 카드가 뜸 (B안) */
+  const base = location.origin + location.pathname.replace(/[^/]*$/, '');
+  const url = base + 'p/' + slugOf(f.player) + '.html';
   const btn = document.getElementById('shareBtn');
   if (navigator.share) {
     navigator.share({ title: '오늘의 구너 운세', text: text, url: url }).catch(function () {});
