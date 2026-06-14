@@ -247,6 +247,14 @@
     background: radial-gradient(circle at 50% 45%, rgba(240, 217, 140, 0.6), rgba(201,162,60,0.18) 45%, transparent 70%);
     animation: flash 2.2s ease-out 0.45s both;
   }
+  .hero.reveal-manager::before {
+    background: radial-gradient(circle at 50% 45%, rgba(95, 145, 235, 0.5), rgba(28,52,110,0.16) 45%, transparent 68%);
+    animation: flash 1.8s ease-out 0.42s both;
+  }
+  .hero.reveal-ultra::before {
+    background: radial-gradient(circle at 50% 45%, rgba(240, 217, 140, 0.78), rgba(201,162,60,0.22) 45%, transparent 73%);
+    animation: flash 2.6s ease-out 0.5s both;
+  }
   @keyframes flash {
     0% { opacity: 0; }
     25% { opacity: 1; }
@@ -270,8 +278,12 @@
   .flip-inner.flipped { transform: rotateY(180deg); }
   .reveal-star .flip-inner { transition-duration: 1.1s; }
   .reveal-legend .flip-inner { transition-duration: 1.4s; }
+  .reveal-manager .flip-inner { transition-duration: 1.2s; }
+  .reveal-ultra .flip-inner { transition-duration: 1.6s; }
   .reveal-star .flip-inner.flipped { animation: starLand 0.5s ease 1.1s both; }
   .reveal-legend .flip-inner.flipped { animation: legendLand 0.7s ease 1.4s both; }
+  .reveal-manager .flip-inner.flipped { animation: starLand 0.5s ease 1.2s both; }
+  .reveal-ultra .flip-inner.flipped { animation: legendLand 0.8s ease 1.6s both; }
   @keyframes starLand {
     0% { transform: rotateY(180deg) scale(1); }
     40% { transform: rotateY(180deg) scale(1.06); }
@@ -379,6 +391,38 @@
   }
   .card-front-face.t-legend::after { border: 1px solid rgba(154, 121, 40, 0.5); }
 
+  /* MANAGER — 아르테타 (보스, 다크 네이비) */
+  .card-front-face.t-manager {
+    background:
+      radial-gradient(120% 78% at 50% 0%, #1b2942 0%, #131a2b 55%, #0b0e17 100%);
+    border: 1px solid rgba(239, 1, 7, 0.55);
+    color: #fff;
+    box-shadow: 0 0 30px rgba(28, 52, 110, 0.55);
+  }
+  .card-front-face.t-manager::after { border: 1px solid rgba(120, 150, 210, 0.4); }
+  .t-manager .fut-num { color: #7aa3e6; }
+  .t-manager .p-badge { background: #0f1830; color: #aecaf6; border: 1px solid rgba(120,150,210,0.55); }
+  .t-manager .fut-name { border-bottom-color: rgba(150,180,230,0.28); }
+  .t-manager .fut-chant { color: #a6c6f2; }
+  .t-manager .fut-fallback { background: linear-gradient(180deg, #2c4170 0%, #16233f 100%); }
+
+  /* ULTRA — 벵거 (인빈시블, 풀 황금 아이콘 카드 / 최고 희귀) */
+  .card-front-face.t-ultra {
+    background:
+      radial-gradient(125% 82% at 50% 0%, #fff7da 0%, #f6e09a 36%, #e8c764 66%, #cfa23f 100%);
+    border: 1.5px solid #fff2c0;
+    color: #4a380c;
+    box-shadow: 0 0 52px rgba(216, 176, 74, 0.75);
+  }
+  .card-front-face.t-ultra::after { border: 1px solid rgba(150, 110, 28, 0.55); }
+  .t-ultra .fut-num { color: #8a6512; }
+  .t-ultra .p-badge { background: linear-gradient(180deg, #5a4410, #38290a); color: #f8ecb8; }
+  .t-ultra .fut-name { color: #3c2f07; border-bottom-color: rgba(120, 90, 20, 0.42); }
+  .t-ultra .fut-chant { color: #6d520f; }
+  .t-ultra .fut-fallback { background: linear-gradient(180deg, #caa23f, #8a6a1c); }
+  /* 황금 카드 전용 광택 패턴 */
+  .t-ultra .shine { background: linear-gradient(115deg, transparent 28%, rgba(255,255,255,0.75) 48%, rgba(255,255,255,0.2) 52%, transparent 64%); }
+
   /* 샤인 스윕 */
   .card-front-face .shine {
     position: absolute;
@@ -390,6 +434,7 @@
   }
   .reveal-star .t-star .shine { animation: sweep 1.1s ease 1.25s both; }
   .reveal-legend .t-legend .shine { animation: sweep 1.3s ease 1.55s both, sweep 1.3s ease 4s; }
+  .reveal-ultra .t-ultra .shine { animation: sweep 1.3s ease 1.75s both, sweep 1.3s ease 4.2s; }
   @keyframes sweep {
     from { transform: translateX(-130%); }
     to   { transform: translateX(130%); }
@@ -582,6 +627,46 @@
     padding: 7px 18px;
   }
 
+  /* ---------- 오늘의 예상 승률 게이지 ---------- */
+  .winrate {
+    margin: 6px 0 22px;
+    padding: 18px 18px 16px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(239,1,7,0.18), rgba(239,1,7,0.04));
+    border: 1px solid rgba(239,1,7,0.42);
+  }
+  .wr-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 13px; }
+  .wr-label { font-size: 13.5px; font-weight: 800; letter-spacing: 1px; color: #fff; }
+  .wr-verdict { font-family: 'Anton', sans-serif; font-size: 16px; letter-spacing: 1px; color: var(--red-text); }
+  .wr-bar {
+    position: relative;
+    height: 32px;
+    border-radius: 99px;
+    background: rgba(255,255,255,0.07);
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .wr-fill {
+    position: absolute;
+    top: 0; bottom: 0; left: 0;
+    width: 0;
+    background: linear-gradient(90deg, #9c0307, var(--red) 55%, var(--red-bright));
+    border-radius: 99px;
+    box-shadow: 0 0 16px rgba(239,1,7,0.6);
+    transition: width 1.1s cubic-bezier(0.3, 0.8, 0.3, 1);
+  }
+  .wr-pct {
+    position: absolute;
+    top: 50%; right: 14px;
+    transform: translateY(-50%);
+    font-family: 'Anton', sans-serif;
+    font-size: 21px;
+    color: #fff;
+    z-index: 2;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.55);
+  }
+  .wr-foot { margin-top: 12px; font-size: 13.5px; line-height: 1.65; font-weight: 500; color: #e9cccd; }
+
   .f-card {
     background: var(--surface);
     border: 1px solid var(--line);
@@ -759,6 +844,19 @@
         <p class="hello" id="hello"></p>
       </div>
 
+      <!-- 오늘의 예상 승률 -->
+      <div class="winrate">
+        <div class="wr-head">
+          <span class="wr-label">⚽ 오늘의 예상 승률</span>
+          <span class="wr-verdict" id="wrVerdict"></span>
+        </div>
+        <div class="wr-bar">
+          <div class="wr-fill" id="wrFill"></div>
+          <span class="wr-pct" id="wrPct"></span>
+        </div>
+        <p class="wr-foot" id="wrFoot"></p>
+      </div>
+
       <div class="form-total">
         <div class="balls" id="formBalls"></div>
         <div><span class="form-word" id="formWord"></span></div>
@@ -903,7 +1001,17 @@ const PLAYERS = [
   { img: null, name: '이안 라이트', en: 'IAN WRIGHT', num: 8, pos: 'FW', tier: 'legend',
     chant: 'Ian Wright Wright Wright! 🎵',
     real: true,
-    cheer: '라이트는 골 넣으면 세상에서 제일 신나게 웃는 선수였어. 좋은 일이 생기면 참지 말고 티 내. 자랑할 사람한테 바로 연락하고.' }
+    cheer: '라이트는 골 넣으면 세상에서 제일 신나게 웃는 선수였어. 좋은 일이 생기면 참지 말고 티 내. 자랑할 사람한테 바로 연락하고.' },
+  /* ---------- 감독 ---------- */
+  { img: 'img/arteta.png', name: '미켈 아르테타', en: 'MIKEL ARTETA', num: 8, pos: 'MANAGER', tier: 'manager',
+    chant: '디테일 하나까지\n놓치지 않는 보스.',
+    real: false,
+    cheer: '아르테타가 맡고 무너졌던 팀이 다시 일어섰지. 오늘은 디테일이 승부를 가른다. 남들이 대충 넘기는 작은 거 하나를 네가 챙기면, 그게 결국 차이를 만든다.' },
+  /* ---------- 초희귀: 인빈시블 보스 ---------- */
+  { img: 'img/wenger.png', name: '아르센 벵거', en: 'ARSÈNE WENGER', num: 49, pos: 'MANAGER', tier: 'ultra',
+    chant: 'One Arsène Wenger,\nthere\'s only one Arsène Wenger! 🎵',
+    real: true,
+    cheer: '벵거 카드는 아무 때나 안 나와. 무패우승을 만든 사람답게, 오늘은 눈앞의 한 판보다 멀리 보고 한 수 깊게 둬. 길게 보는 사람이 결국 다 가져간다.' }
 ];
 
 /* ===================== 운세 텍스트 — 전부 구체적인 행동/시간/숫자 ===================== */
@@ -913,64 +1021,109 @@ const TEXT = {
       '미뤄둔 일 중에 제일 부담스러운 거 하나를 오전에 끝내봐. 오늘은 시작만 하면 막힘없이 끝까지 가는 날이야.',
       '부탁할 일이 있으면 점심 전에 말 꺼내. 오늘따라 사람들이 유난히 잘 들어주거든.',
       '연락 끊긴 지 오래된 친구한테 먼저 메시지 보내봐. 반가운 근황에 좋은 소식까지 딸려 온다.',
-      '첫 직감이 정답인 하루. 메뉴든 물건이든 처음 끌린 걸로 골라. 두 번 고민하면 오히려 꼬인다.'
+      '첫 직감이 정답인 하루. 메뉴든 물건이든 처음 끌린 걸로 골라. 두 번 고민하면 오히려 꼬인다.',
+      '오늘 하는 결정은 웬만하면 다 맞아. 아침에 고민하던 거 있으면 11시 전에 질러버려.',
+      '계획에 없던 제안이 하나 들어온다. 평소 같으면 미뤘을 것도 오늘은 일단 "좋아"라고 해봐.',
+      '오래 끌던 일이 오늘 한 통의 연락으로 풀린다. 모르는 번호도 일단 받아보고.',
+      '하루 종일 운이 네 쪽에 붙어. 줄 서면 네 앞에서 딱 맞고, 신호도 네가 갈 때 켜진다.'
     ],
     mid: [
       '오전엔 일이 더디게 풀려도 오후 2시 넘으면 속도가 붙어. 중요한 일정은 오후에 배치해.',
       '새 일은 벌이지 말고 하던 것만 마무리해. 끝낸 일 개수가 곧 오늘의 승점이다.',
       '점심 메뉴를 평소에 안 먹던 걸로 골라봐. 그 작은 변화 하나가 처지는 오후를 살려준다.',
-      '무리해서 풀파워 낼 필요 없는 로테이션 데이. 평소의 80%면 충분하다.'
+      '무리해서 풀파워 낼 필요 없는 로테이션 데이. 평소의 80%면 충분하다.',
+      '큰 거 하나보다 작은 거 세 개 끝내는 게 이득인 날. 가벼운 일부터 차례로 지워나가.',
+      '오늘은 듣는 쪽이 유리해. 회의든 대화든 먼저 말하기보다 끝까지 듣고 한마디만 보태.',
+      '서두르면 꼭 한 군데서 빠뜨린다. 평소보다 10분 일찍 움직여서 여유 두고 가.',
+      '기대 안 한 데서 칭찬 한마디 듣는 날. 그 말 기억해뒀다가 처질 때 꺼내 써.'
     ],
     low: [
       '약속은 늘리지 말고 일찍 들어가자. 밤 11시 전에 자면 내일 컨디션이 두 배로 돌아온다.',
       '중요한 이야기는 문자 말고 전화나 얼굴 보고 해. 글로 보내면 꼭 한 군데서 오해가 생긴다.',
-      '하루쯤은 몸 챙기는 데 써도 돼. 따뜻한 거 먹고 어깨 스트레칭 한 번 하고 일찍 쉬면 그걸로 이긴 거다.'
+      '하루쯤은 몸 챙기는 데 써도 돼. 따뜻한 거 먹고 어깨 스트레칭 한 번 하고 일찍 쉬면 그걸로 이긴 거다.',
+      '오늘은 큰 결정 미뤄. 사고 싶은 것도, 보내고 싶은 메시지도 내일 아침에 다시 보면 답이 달라진다.',
+      '괜히 일 벌이지 말고 수비만 단단히 해. 안 지면 그게 이기는 날도 있어.',
+      '컨디션 안 올라오면 억지로 끌어올리지 마. 커피 한 잔, 환기 한 번, 그 정도로 버텨도 충분해.'
     ]
   },
   love: {
     hi: [
       '보고 싶으면 네가 먼저 말해버려. "보고 싶다" 다섯 글자면 상대도 똑같았다는 답이 온다.',
       '둘이 찍은 사진 중에 제일 웃긴 거 하나 골라서 보내봐. 그 사진 하나로 한 시간은 웃으면서 대화하게 돼.',
-      '고마웠던 일 하나만 콕 집어서 말해줘. "그때 그거 진짜 고마웠어" 한마디면 분위기 다 잡는다.'
+      '고마웠던 일 하나만 콕 집어서 말해줘. "그때 그거 진짜 고마웠어" 한마디면 분위기 다 잡는다.',
+      '오늘은 표현하는 만큼 돌아와. 손발 오그라드는 말도 딱 3초면 끝나고, 좋은 분위기는 하루 종일 간다.',
+      '같이 가고 싶었던 데 있으면 지금 캡처해서 보내. "여기 언제 갈까?" 한마디에 다음 약속이 잡힌다.',
+      '오늘 둘 사이 텐션이 제일 좋은 날. 사소한 투정도 귀엽게 들리니까 하고 싶은 말 편하게 해.',
+      '먼저 안아주는 쪽이 되는 날. 말보다 행동 하나가 오늘은 열 마디를 이긴다.',
+      '안부 한 통이 길어진다. "밥 먹었어?"로 시작했는데 어느새 한 시간 통화하고 있을걸.'
     ],
     mid: [
       '데이트는 멀리 말고 가까운 데서. 손잡고 동네 한 바퀴 걷고 아이스크림 하나면 충분해.',
       '답장이 늦어도 재촉하지 말고 기다려. 바빠서 그런 거고, 저녁엔 평소보다 긴 답장이 온다.',
-      '먼저 연락하는 쪽이 이기는 날. 용건 없어도 "뭐 해?" 한 통이면 오늘 대화가 풀린다.'
+      '먼저 연락하는 쪽이 이기는 날. 용건 없어도 "뭐 해?" 한 통이면 오늘 대화가 풀린다.',
+      '큰 이벤트 말고 작은 챙김이 통하는 날. 좋아하는 간식 하나 사다 주는 걸로 점수 다 딴다.',
+      '오늘은 듣는 연애가 정답. 상대가 하는 얘기에 "그래서 어떻게 됐어?" 한마디만 더 붙여줘.',
+      '서로 바빠도 5분은 비워봐. 짧아도 얼굴 보고 하는 통화 한 번이 문자 스무 개보다 낫다.',
+      '오늘 찍은 사진은 남겨둬. 별거 아닌 순간이 나중에 제일 꺼내 보는 사진이 된다.'
     ],
     low: [
       '장난으로라도 놀리는 말은 오늘 하루만 금지. 평소엔 웃고 넘기던 말도 오늘따라 서운하게 꽂힌다.',
-      '서운한 게 생겨도 오늘은 묵혀두고 내일 얘기해. 하루 지나면 절반은 별일 아니었더라.'
+      '서운한 게 생겨도 오늘은 묵혀두고 내일 얘기해. 하루 지나면 절반은 별일 아니었더라.',
+      '오늘은 답장 텀이 길어도 의심하지 마. 상대도 너만큼 정신없는 하루를 보내는 중이야.',
+      '예민한 얘기는 배고플 때 꺼내지 마. 뭐든 먹고 나서 얘기하면 같은 말도 부드럽게 나간다.',
+      '오늘 욱하면 손해 보는 쪽은 너야. 하고 싶은 말 있으면 메모장에 적었다가 내일 다시 읽어봐.'
     ]
   },
   money: {
     hi: [
       '카드 캐시백, 앱 포인트, 안 쓴 기프티콘 싹 다 확인해봐. 잊고 있던 돈이 생각보다 나온다.',
       '좋아하는 사람한테 쓰는 돈은 아끼지 마. 금액보다 타이밍이 좋아서 두 배로 기억에 남는다.',
-      '찜해둔 물건이 있으면 오늘 가격을 확인해봐. 세일에 들어갔거나 쿠폰이 풀렸을 확률이 높아.'
+      '찜해둔 물건이 있으면 오늘 가격을 확인해봐. 세일에 들어갔거나 쿠폰이 풀렸을 확률이 높아.',
+      '오늘은 작은 굳히기가 통한다. 안 쓰는 구독 하나만 끊어도 한 달 치 커피값이 굳어.',
+      '받을 돈 있으면 오늘 말 꺼내기 좋은 날. "그거 있잖아" 한마디면 깔끔하게 정리된다.',
+      '예상 못 한 데서 굳는 돈이 있다. 할인 받거나, 누가 사주거나, 안 내도 됐던 게 생긴다.',
+      '오래 고민하던 큰 지출, 오늘 알아보면 더 싸게 사는 방법이 보인다. 결제는 천천히, 검색은 부지런히.'
     ],
     mid: [
       '배달 한 번만 줄여봐. 그 돈으로 내일 아침에 좋아하는 커피 사는 게 훨씬 남는 장사다.',
-      '장바구니에 담은 건 24시간 뒤에 다시 봐. 내일도 사고 싶으면 그때 사도 안 늦어.'
+      '장바구니에 담은 건 24시간 뒤에 다시 봐. 내일도 사고 싶으면 그때 사도 안 늦어.',
+      '오늘 쓴 돈은 자기 전에 한 번만 훑어. 어디서 샜는지 보이면 내일은 자동으로 아껴진다.',
+      '큰돈 들어갈 일은 없는 평범한 날. 대신 영수증 한 번 정리해두면 다음 주가 편해진다.',
+      '공짜로 생기는 건 일단 챙겨. 포인트든 쿠폰이든 적립이든, 오늘은 줍는 만큼 이득이야.',
+      '사고 싶은 게 있으면 같은 물건 최저가만 한 번 더 검색해. 5분이 만 원을 아낀다.'
     ],
     low: [
       '5만원 넘는 결제는 전부 내일로 미뤄. 하루 지나서 보면 안 사도 됐던 게 절반이다.',
-      '돈 계산은 그 자리에서 확실하게. 더치페이 애매하게 "내가 낼게" 하고 넘기지 말기.'
+      '돈 계산은 그 자리에서 확실하게. 더치페이 애매하게 "내가 낼게" 하고 넘기지 말기.',
+      '오늘은 충동구매 경보. 장바구니까지만 담고 결제창은 닫아. 내일의 네가 고마워한다.',
+      '"이 정도쯤이야" 하는 작은 결제가 모이는 날. 커피, 택시, 군것질 — 오늘만 한 번씩 참아봐.',
+      '빌려주는 돈은 오늘 만들지 마. 좋은 마음도 돈 앞에선 복잡해진다. 정 주고 싶으면 차라리 밥을 사.'
     ]
   },
   work: {
     hi: [
       '출근하자마자 제일 어려운 일부터 잡아. 오전 10시까지의 집중력이 오늘 하루치 일의 절반을 끝내준다.',
       '떠오르는 아이디어는 그 자리에서 바로 메모해. 지금 적는 메모 하나가 다음 주에 큰 건을 해결해준다.',
-      '한 일은 퇴근 전에 한 줄이라도 정리해서 공유해. 요즘 윗사람이 유심히 보고 있거든.'
+      '한 일은 퇴근 전에 한 줄이라도 정리해서 공유해. 요즘 윗사람이 유심히 보고 있거든.',
+      '오늘 낸 의견이 통과되기 좋은 날. 미뤄둔 제안 있으면 오전 회의에서 먼저 꺼내.',
+      '막히던 문제의 답이 갑자기 보인다. 펜 들고 5분만 끄적여봐, 머릿속에서만 굴리지 말고.',
+      '도와달라고 하면 오늘은 다 도와준다. 혼자 끙끙대지 말고 잘하는 사람한테 바로 물어봐.',
+      '집중력이 제일 좋은 날. 알림 다 끄고 한 시간만 몰입하면 평소 세 시간 치가 끝난다.'
     ],
     mid: [
       '할 일은 딱 세 개만 골라서 그것만 끝내. 욕심내서 벌이면 오히려 하나도 못 끝낸다.',
-      '오후 3시쯤 집중력 떨어질 때 초콜릿 하나 먹고 10분 걸어. 남은 두 시간의 효율이 달라진다.'
+      '오후 3시쯤 집중력 떨어질 때 초콜릿 하나 먹고 10분 걸어. 남은 두 시간의 효율이 달라진다.',
+      '오늘은 마무리보다 정리가 어울려. 벌여둔 일들 상태만 한 번씩 점검해도 내일이 가벼워진다.',
+      '큰 성과 욕심내지 말고 기본만 지켜. 메일 답장, 일정 확인, 그것만 밀리지 않게.',
+      '한 번에 하나씩. 멀티태스킹 하는 순간 다 느려지는 날이니까 창 하나만 띄워놓고 해.',
+      '애매하면 물어보고 가. 혼자 추측해서 진행하면 오후에 다시 해야 할 일이 생긴다.'
     ],
     low: [
       '보내는 메일이랑 메시지는 전송 전에 딱 한 번씩만 다시 읽어. 오타 하나가 일을 두 배로 만든다.',
-      '30분 넘게 막히는 일은 붙잡지 말고 내일 아침으로 넘겨. 자고 일어나면 10분 만에 풀리는 문제였어.'
+      '30분 넘게 막히는 일은 붙잡지 말고 내일 아침으로 넘겨. 자고 일어나면 10분 만에 풀리는 문제였어.',
+      '오늘은 큰 결정 보류가 정답. 중요한 답장일수록 하룻밤 재우고 내일 보내.',
+      '실수 안 하는 게 곧 잘하는 날. 새 시도보다 하던 방식 그대로 꼼꼼하게 가.',
+      '머리 안 돌아가면 단순 작업부터. 파일 정리, 자료 백업 같은 거 해두면 그래도 하루가 남는다.'
     ]
   },
   missions: [
@@ -981,7 +1134,15 @@ const TEXT = {
     '책상 위 안 쓰는 물건 3개 치우기. 자리가 깨끗하면 폼도 올라와.',
     '빨간 거 하나 몸에 지니고 나가기. 양말이든 머리끈이든 립이든.',
     '하늘이든 커피든 사진 한 장 찍어두기. 나중에 오늘이 기억나게.',
-    '저녁에 스트레칭 5분. 종아리부터 어깨까지, 선수들 회복 루틴처럼.'
+    '저녁에 스트레칭 5분. 종아리부터 어깨까지, 선수들 회복 루틴처럼.',
+    '오늘 고마운 사람한테 짧게라도 연락 한 통. "덕분이야" 한마디면 돼.',
+    '점심 후 10분 산책. 햇빛 잠깐 쐬는 게 오후 졸음을 이긴다.',
+    '안 읽고 쌓아둔 메시지 딱 3개만 답장. 밀린 거 줄어드는 맛이 있다.',
+    '오늘 제일 잘한 일 하나 소리 내서 칭찬하기. "이건 잘했네" 한마디.',
+    '내일 입을 옷 미리 꺼내두기. 아침 5분이 통째로 굳는다.',
+    '핸드폰 안 보고 밥 한 끼 먹기. 맛이 두 배로 느껴진다.',
+    '자기 전에 폰 충전기 꽂고 알람 두 개 맞추기. 내일의 너를 위한 셋업.',
+    '오늘 들은 노래 중 제일 좋았던 거 하나 저장해두기. 플레이리스트가 곧 추억이야.'
   ],
   colors: [
     ['아스날 레드', '#EF0107'], ['크레스트 골드', '#c9a23c'], ['어웨이 네이비', '#063672'],
@@ -990,7 +1151,8 @@ const TEXT = {
   ],
   items: [
     '빨간 머리끈', '립밤', '따뜻한 라떼', '아스날 머플러', '귀여운 양말', '초콜릿 하나',
-    '이어폰', '작은 노트', '핸드크림', '빨간 네일', '폰 배경 바꾸기', '하이라이트 영상 한 편'
+    '이어폰', '작은 노트', '핸드크림', '빨간 네일', '폰 배경 바꾸기', '하이라이트 영상 한 편',
+    '향수 한 번 더', '작은 거울', '따뜻한 캔커피', '빨간 펜', '미니 향초', '좋아하는 컵'
   ]
 };
 
@@ -1031,16 +1193,34 @@ function buildFortune(name, birth, forcePlayer) {
   function tier(s) { return s >= 4 ? 'hi' : s === 3 ? 'mid' : 'low'; }
 
   const sT = score(), sL = score(), sM = score(), sW = score();
-  /* 등급 가중치: legend 8% / star 33% / standard 59% — 레전드는 뜨면 특별하게 */
+
+  /* 등급 가중치: ultra(벵거) 3% / legend 8% / manager(아르테타) 5% / star 30% / standard 54% */
   const roll = rng();
-  const pool = roll < 0.08 ? PLAYERS.filter(function (p) { return p.tier === 'legend'; })
-             : roll < 0.41 ? PLAYERS.filter(function (p) { return p.tier === 'star'; })
-             : PLAYERS.filter(function (p) { return p.tier === 'standard'; });
+  let pool;
+  if (roll < 0.03)      pool = PLAYERS.filter(function (p) { return p.tier === 'ultra'; });
+  else if (roll < 0.11) pool = PLAYERS.filter(function (p) { return p.tier === 'legend'; });
+  else if (roll < 0.16) pool = PLAYERS.filter(function (p) { return p.tier === 'manager'; });
+  else if (roll < 0.46) pool = PLAYERS.filter(function (p) { return p.tier === 'star'; });
+  else                  pool = PLAYERS.filter(function (p) { return p.tier === 'standard'; });
+  if (!pool.length) pool = PLAYERS.filter(function (p) { return p.tier === 'standard'; });
   let player = pick(pool);
   if (forcePlayer !== null && PLAYERS[forcePlayer]) player = PLAYERS[forcePlayer];
 
+  /* 오늘의 예상 승률 — 폼(총운) + 뽑힌 선수 등급 반영. 희귀할수록 승률 ↑ (벵거=무패 인빈시블) */
+  let winRate = Math.min(99, Math.max(38, 45 + Math.floor(rng() * 50) + (sT - 3) * 4));
+  const pt = player.tier;
+  if (pt === 'ultra')        winRate = 94 + Math.floor(rng() * 6);              // 94~99 (인빈시블)
+  else if (pt === 'legend')  winRate = Math.max(winRate, 85 + Math.floor(rng() * 8)); // 85+
+  else if (pt === 'manager') winRate = Math.max(winRate, 80 + Math.floor(rng() * 8)); // 80+
+  else if (pt === 'star')    winRate = Math.min(99, winRate + 7);
+  winRate = Math.min(99, winRate);
+
+  /* 행운의 등번호는 감독(번호 없음) 제외하고 추출 */
+  const numbered = PLAYERS.filter(function (p) { return typeof p.num === 'number'; });
+
   return {
     scores: { total: sT, love: sL, money: sM, work: sW },
+    winRate: winRate,
     texts: {
       total: pick(TEXT.total[tier(sT)]),
       love: pick(TEXT.love[tier(sL)]),
@@ -1049,7 +1229,7 @@ function buildFortune(name, birth, forcePlayer) {
     },
     player: player,
     lucky: {
-      num: pick(PLAYERS).num,
+      num: pick(numbered).num,
       color: pick(TEXT.colors),
       item: pick(TEXT.items)
     },
@@ -1066,6 +1246,14 @@ let currentPlayer = null;
 
 function fmtDate(d) {
   return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일 (' + WEEK[d.getDay()] + ')';
+}
+function winVerdict(wr) {
+  if (wr >= 92) return { word: '대승각 🔥', foot: '오늘은 뭘 해도 풀리는 날. 망설이지 말고 들이대.' };
+  if (wr >= 82) return { word: '완승 분위기', foot: '흐름이 네 쪽이야. 하고 싶은 거 오늘 시작해.' };
+  if (wr >= 72) return { word: '신승각', foot: '끝까지 가면 이긴다. 한 끗 차이를 집중으로 메워.' };
+  if (wr >= 62) return { word: '우세한 흐름', foot: '무난하게 우세. 큰 욕심만 안 내면 좋은 하루야.' };
+  if (wr >= 52) return { word: '박빙 승부', foot: '반반의 날. 먼저 움직이는 쪽이 가져간다.' };
+  return { word: '고전 끝 한 방', foot: '오늘은 수비의 날. 무리 말고 기회 한 번만 노려.' };
 }
 function ballHtml(n) {
   let out = '';
@@ -1101,6 +1289,15 @@ function showFortune(name, birth, forcePlayer) {
 
   document.getElementById('formBalls').innerHTML = ballHtml(f.scores.total);
   document.getElementById('formWord').textContent = 'FORM : ' + FORM_WORD[f.scores.total];
+
+  /* 오늘의 예상 승률 게이지 */
+  const wv = winVerdict(f.winRate);
+  document.getElementById('wrPct').textContent = f.winRate + '%';
+  document.getElementById('wrVerdict').textContent = wv.word;
+  document.getElementById('wrFoot').textContent = wv.foot;
+  const wrFill = document.getElementById('wrFill');
+  wrFill.style.width = '0%';
+  setTimeout(function () { wrFill.style.width = f.winRate + '%'; }, 220);
 
   document.getElementById('bTotal').innerHTML = ballHtml(f.scores.total);
   document.getElementById('bLove').innerHTML = ballHtml(f.scores.love);
@@ -1139,7 +1336,11 @@ function renderPlayer(p) {
   front.classList.add('t-' + p.tier);
 
   document.getElementById('pBadge').textContent =
-    p.tier === 'legend' ? '★ LEGEND' : p.tier === 'star' ? '★ STAR' : 'FIRST TEAM';
+    p.tier === 'ultra' ? '⚜ THE INVINCIBLE'
+    : p.tier === 'legend' ? '★ LEGEND'
+    : p.tier === 'manager' ? '◆ HEAD COACH'
+    : p.tier === 'star' ? '★ STAR'
+    : 'FIRST TEAM';
   document.getElementById('pNum').textContent = p.num;
   document.getElementById('pPos').textContent = p.pos;
   document.getElementById('pName').textContent = p.name;
@@ -1181,13 +1382,15 @@ function flipCard() {
   card.classList.add('flipped');
   document.getElementById('heroWho').textContent = '';
 
-  /* 등급별 파티클: star = 레드 6개, legend = 골드 14개 */
-  const count = currentPlayer.tier === 'legend' ? 14 : currentPlayer.tier === 'star' ? 6 : 0;
+  /* 등급별 파티클: star/manager = 레드, legend/ultra = 골드. 희귀할수록 많이 */
+  const t = currentPlayer.tier;
+  const count = t === 'ultra' ? 20 : t === 'legend' ? 14 : t === 'manager' ? 8 : t === 'star' ? 6 : 0;
   const box = card.parentElement;
-  const delayBase = currentPlayer.tier === 'legend' ? 1.3 : 1.0;
+  const delayBase = t === 'ultra' ? 1.5 : t === 'legend' ? 1.3 : t === 'manager' ? 1.2 : 1.0;
+  const redSpark = (t === 'star' || t === 'manager');
   for (let i = 0; i < count; i++) {
     const s = document.createElement('span');
-    s.className = 'spark' + (currentPlayer.tier === 'star' ? ' red' : '');
+    s.className = 'spark' + (redSpark ? ' red' : '');
     s.textContent = ['✦', '✧', '⭐'][i % 3];
     s.style.left = (Math.random() * 100) + '%';
     s.style.top = (10 + Math.random() * 80) + '%';
@@ -1196,7 +1399,7 @@ function flipCard() {
     box.appendChild(s);
   }
 
-  const wait = currentPlayer.tier === 'legend' ? 1500 : currentPlayer.tier === 'star' ? 1200 : 800;
+  const wait = t === 'ultra' ? 1700 : t === 'legend' ? 1500 : t === 'manager' ? 1300 : t === 'star' ? 1200 : 800;
   setTimeout(function () {
     document.getElementById('pCheer').classList.add('show');
     document.getElementById('scrollCue').classList.add('show');
