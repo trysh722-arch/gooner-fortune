@@ -1234,7 +1234,8 @@ function buildFortune(name, birth, forcePlayer) {
   function pick(pool) { return pool[Math.floor(rng() * pool.length)]; }
   function tier(s) { return s >= 4 ? 'hi' : s === 3 ? 'mid' : 'low'; }
 
-  const sT = score(), sL = score(), sM = score(), sW = score();
+  let sT = score();
+  const sL = score(), sM = score(), sW = score();
 
   /* 등급 가중치: ultra(벵거) 3% / legend 8% / manager(아르테타) 5% / star 30% / standard 54% */
   const roll = rng();
@@ -1248,14 +1249,17 @@ function buildFortune(name, birth, forcePlayer) {
   let player = pick(pool);
   if (forcePlayer !== null && PLAYERS[forcePlayer]) player = PLAYERS[forcePlayer];
 
-  /* 오늘의 예상 승률 — 폼(총운) + 뽑힌 선수 등급 반영. 희귀할수록 승률 ↑ (벵거=무패 인빈시블) */
-  let winRate = Math.min(99, Math.max(38, 45 + Math.floor(rng() * 50) + (sT - 3) * 4));
+  /* A안: 희귀 카드가 뜨면 오늘의 폼(총운)도 올라감 → 폼과 승률이 항상 같은 방향 */
   const pt = player.tier;
-  if (pt === 'ultra')        winRate = 94 + Math.floor(rng() * 6);              // 94~99 (인빈시블)
-  else if (pt === 'legend')  winRate = Math.max(winRate, 85 + Math.floor(rng() * 8)); // 85+
-  else if (pt === 'manager') winRate = Math.max(winRate, 80 + Math.floor(rng() * 8)); // 80+
-  else if (pt === 'star')    winRate = Math.min(99, winRate + 7);
-  winRate = Math.min(99, winRate);
+  if (pt === 'ultra' || pt === 'legend') sT = 5;
+  else if (pt === 'manager') sT = Math.max(sT, 4);
+  else if (pt === 'star')    sT = Math.max(sT, 3);
+
+  /* 오늘의 예상 승률 = 오늘의 폼(5점) 밴드에 비례. 벵거=무패는 최상단 고정 */
+  const BAND = { 5: [86, 95], 4: [73, 85], 3: [60, 72], 2: [46, 58] };
+  const bd = BAND[sT];
+  let winRate = bd[0] + Math.floor(rng() * (bd[1] - bd[0] + 1));
+  if (pt === 'ultra') winRate = 94 + Math.floor(rng() * 6);
 
   /* 행운의 등번호는 감독(번호 없음) 제외하고 추출 */
   const numbered = PLAYERS.filter(function (p) { return typeof p.num === 'number'; });
