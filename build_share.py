@@ -58,46 +58,41 @@ def card(p):
     dr.rectangle([8, 8, W - 9, H - 9], outline=acc, width=4)
     dr.rectangle([20, 20, W - 21, H - 21], outline=(255, 255, 255, 30), width=1)
 
-    # 우측 선수 누끼
-    if p["img"] and os.path.exists(p["img"]):
-        ph = Image.open(p["img"]).convert("RGBA")
-        th = 600
-        tw = round(ph.width * th / ph.height)
-        ph = ph.resize((tw, th), Image.LANCZOS)
-        # 그림자
-        sh = Image.new("RGBA", im.size, (0, 0, 0, 0))
-        shd = ImageDraw.Draw(sh)
-        px = W - tw - 40
-        shd.ellipse([px + 40, H - 70, px + tw - 10, H - 20], fill=(0, 0, 0, 120))
-        sh = sh.filter(ImageFilter.GaussianBlur(18))
-        im.paste(Image.alpha_composite(im.convert("RGBA"), sh).convert("RGB"), (0, 0))
-        im.paste(ph, (px, H - th - 10), ph)
-    else:  # 이니셜 폴백 (이안 라이트)
-        ini = "".join(w[0] for w in p["en"].split())[:2]
-        fb = font(ARIAL_BD, 240)
-        dr.text((W - 360, 150), ini, font=fb, fill=acc)
-
+    # === 사진 없는 깔끔한 텍스트 카드 (가운데 정렬) ===
+    cx = W // 2
+    # 큰 등번호 — 흐릿한 배경 워터마크 (FUT 느낌, 글자와 안 겹치게 위쪽)
+    wl = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    wd = ImageDraw.Draw(wl)
+    wd.text((cx, 250), str(p["num"]), font=font(ARIAL_BD, 300),
+            fill=(acc[0], acc[1], acc[2], 26), anchor="mm")
+    im = Image.alpha_composite(im.convert("RGBA"), wl).convert("RGB")
     dr = ImageDraw.Draw(im)
-    x = 60
+
     # 상단 라벨
-    dr.text((x, 70), "오늘의 럭키 거너", font=font(MALGUN_BD, 30), fill=acc)
-    # 등급 뱃지
-    by = 118
+    dr.text((cx, 92), "오늘의 럭키 거너", font=font(MALGUN_BD, 34), fill=acc, anchor="mm")
+    dr.text((cx, 132), "TODAY'S LUCKY GOONER", font=font(ARIAL_BD, 22), fill=(150, 150, 160), anchor="mm")
+    # 등급 뱃지 (가운데)
     bt = BADGE[p["tier"]]
-    bf = font(ARIAL_BD, 24)
+    bf = font(ARIAL_BD, 26)
     bw = dr.textlength(bt, font=bf)
-    dr.rounded_rectangle([x, by, x + bw + 36, by + 44], radius=22, fill=acc)
-    dr.text((x + 18, by + 9), bt, font=bf, fill=(15, 12, 6))
-    # 이름 (한글)
-    nf = font(MALGUN_BD, 86)
-    dr.text((x, 188), p["name"], font=nf, fill=(255, 255, 255))
+    bx0 = cx - (bw + 48) // 2
+    dr.rounded_rectangle([bx0, 180, bx0 + bw + 48, 230], radius=25, fill=acc)
+    dr.text((cx, 205), bt, font=bf, fill=(15, 12, 6), anchor="mm")
+    # 이름 (길면 자동 축소)
+    ns = 100
+    while ns > 50:
+        nf = font(MALGUN_BD, ns)
+        if dr.textlength(p["name"], font=nf) <= W - 120:
+            break
+        ns -= 4
+    dr.text((cx, 320), p["name"], font=font(MALGUN_BD, ns), fill=(255, 255, 255), anchor="mm")
     # 영문 + 번호/포지션
-    dr.text((x, 296), p["en"], font=font(ARIAL_BD, 30), fill=(190, 190, 200))
-    dr.text((x, 338), "No.%s  ·  %s" % (p["num"], p["pos"]), font=font(MALGUN_BD, 30), fill=acc)
-    # 하단 CTA
-    dr.text((x, 470), "너도 생년월일 넣고", font=font(MALGUN_BD, 38), fill=(235, 235, 240))
-    dr.text((x, 520), "오늘의 카드를 뽑아봐", font=font(MALGUN_BD, 38), fill=(235, 235, 240))
-    dr.text((x, 580), "trysh722-arch.github.io/gooner-fortune", font=font(MALGUN, 22), fill=(140, 140, 150))
+    dr.text((cx, 400), p["en"], font=font(ARIAL_BD, 28), fill=(190, 190, 200), anchor="mm")
+    dr.text((cx, 448), "No.%s   ·   %s" % (p["num"], p["pos"]), font=font(MALGUN_BD, 30), fill=acc, anchor="mm")
+    # 구분선 + CTA
+    dr.line([(cx - 200, 500), (cx + 200, 500)], fill=(255, 255, 255), width=1)
+    dr.text((cx, 540), "너도 생년월일 넣고 오늘의 카드를 뽑아봐", font=font(MALGUN_BD, 33), fill=(235, 235, 240), anchor="mm")
+    dr.text((cx, 590), "trysh722-arch.github.io/gooner-fortune", font=font(MALGUN, 22), fill=(140, 140, 150), anchor="mm")
     return im
 
 os.makedirs(os.path.join(ROOT, "share"), exist_ok=True)
