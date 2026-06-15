@@ -1,0 +1,59 @@
+/* ===== 도감 P1 애드온 스타일 ===== */
+.wrap { padding-bottom: calc(96px + env(safe-area-inset-bottom)) !important; }
+
+/* 하단 네비 */
+#dexNav {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+  display: flex; background: rgba(14,14,20,0.96);
+  border-top: 1px solid var(--line); backdrop-filter: blur(10px);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+#dexNav button {
+  flex: 1; background: none; border: none; color: var(--ink-dim);
+  font-family: inherit; font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+  padding: 10px 6px; cursor: pointer;
+}
+#dexNav button.active { color: #fff; }
+#dexNav .ic { display: block; font-size: 21px; margin-bottom: 3px; }
+
+/* 도감 본문 */
+#dex { display: none; }
+#dex.show { display: block; animation: fadeUp 0.4s ease both; }
+.dex-head { text-align: center; margin: 8px 0 18px; }
+.dex-title { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 12px; }
+.dex-prog { height: 12px; border-radius: 99px; background: rgba(255,255,255,0.08); overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+.dex-prog-bar { height: 100%; background: linear-gradient(90deg,#9c0307,var(--red) 60%,var(--red-bright)); border-radius: 99px; transition: width 0.6s ease; }
+.dex-cnt { margin-top: 9px; font-size: 13px; font-weight: 600; color: var(--ink-dim); }
+.dex-sec { font-family: 'Anton',sans-serif; font-size: 13px; letter-spacing: 2px; color: var(--red-text); margin: 22px 0 10px; }
+.dex-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+
+/* 미니 카드 */
+.dexc { aspect-ratio: 0.72; border-radius: 12px; position: relative; overflow: hidden; }
+.dexc.owned { background: radial-gradient(120% 70% at 50% 0%,#26262e,#0e0e13); border: 1px solid var(--line); }
+.dexc.owned.t-standard { background: radial-gradient(120% 70% at 50% 0%,#f3f3f6,#e9e9ee); }
+.dexc.owned.t-star { border-color: rgba(239,1,7,0.6); }
+.dexc.owned.t-legend { background: radial-gradient(120% 75% at 50% 0%,#f3e5bd,#e2c887); border-color: #fff2c4; }
+.dexc.owned.t-manager { background: radial-gradient(120% 75% at 50% 0%,#1b2942,#0b0e17); border-color: rgba(120,150,210,0.5); }
+.dexc.owned.t-ultra { background: radial-gradient(125% 80% at 50% 0%,#f6e09a,#cfa23f); border-color: #fff2c0; }
+.dexc-ph { position: absolute; top: 7%; left: 0; right: 0; height: 60%; display: flex; align-items: flex-end; justify-content: center; }
+.dexc-ph img { max-width: 96%; max-height: 100%; object-fit: contain; }
+.dexc-ini { font-family: 'Anton',sans-serif; font-size: 32px; color: #fff; }
+.dexc-num { position: absolute; top: 6px; left: 9px; font-family: 'Anton',sans-serif; font-size: 18px; color: var(--red); z-index: 2; }
+.dexc.t-legend .dexc-num, .dexc.t-ultra .dexc-num { color: #8a6512; }
+.dexc.t-manager .dexc-num { color: #7aa3e6; }
+.dexc-nm { position: absolute; bottom: 0; left: 0; right: 0; padding: 5px 4px; font-size: 10px; font-weight: 800; text-align: center; background: rgba(0,0,0,0.4); color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dexc.t-standard .dexc-nm { background: rgba(255,255,255,0.55); color: #17171c; }
+.dexc.t-legend .dexc-nm, .dexc.t-ultra .dexc-nm { background: rgba(120,90,20,0.28); color: #3c2f07; }
+.dexc.locked { background: #15151b; border: 1px dashed rgba(255,255,255,0.14); display: flex; align-items: center; justify-content: center; }
+.dexc-q { font-family: 'Anton',sans-serif; font-size: 40px; color: rgba(255,255,255,0.18); }
+.dexc.locked .dexc-nm { background: transparent; color: rgba(255,255,255,0.22); }
+
+/* 테스트 버튼 */
+#dexTest, #dexReset { display: block; width: 100%; margin-top: 12px; background: none; border: 1px solid var(--line); color: var(--ink-dim); font-family: inherit; font-size: 13px; font-weight: 700; padding: 12px; border-radius: 12px; cursor: pointer; }
+#dexTest { border-color: rgba(239,1,7,0.5); color: var(--red-text); margin-top: 18px; }
+
+/* 수집 토스트 */
+.collect-toast { position: fixed; left: 50%; top: 15%; transform: translateX(-50%) translateY(-12px); z-index: 60; padding: 12px 24px; border-radius: 99px; font-weight: 800; font-size: 15px; opacity: 0; transition: all 0.4s ease; pointer-events: none; white-space: nowrap; }
+.collect-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.collect-toast.new { background: linear-gradient(180deg,#f0d98c,#c9a23c); color: #3a2c08; box-shadow: 0 8px 24px rgba(201,162,60,0.5); }
+.collect-toast.dupe { background: #2a2a32; color: #bdbdc6; border: 1px solid var(--line); }
