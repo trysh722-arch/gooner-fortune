@@ -3,6 +3,16 @@
   if (typeof PLAYERS === 'undefined') return;
   var TOTAL = PLAYERS.length;
   var KEY = 'gCollection';
+
+  /* 전체 도감 리셋 토큰 — 이 값 바꾸면 모든 유저 도감이 다음 접속 때 1회 0개로 초기화 */
+  var RESET_VER = 'reset-2026-06-15';
+  try {
+    if (localStorage.getItem('gColVer') !== RESET_VER) {
+      localStorage.removeItem('gCollection');
+      localStorage.removeItem('gDexSeen');
+      localStorage.setItem('gColVer', RESET_VER);
+    }
+  } catch (e) {}
   function load() { try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) { return {}; } }
   function save(c) { try { localStorage.setItem(KEY, JSON.stringify(c)); } catch (e) {} }
   function tkey() { return dateKey(new Date()); }
