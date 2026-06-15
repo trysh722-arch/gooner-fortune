@@ -180,9 +180,18 @@
       });
       h += '</div>';
     });
-    h += '<button id="dexTest">🎲 테스트로 랜덤 5장 모으기</button>' +
-      '<button id="dexReset">도감 초기화 (테스트)</button>';
+    h += '<button id="dexDemo">🎬 새 카드 획득 연출 다시보기</button>' +
+      '<button id="dexTest">🎲 테스트로 랜덤 5장 모으기</button>' +
+      '<button id="dexReset">⚠️ 도감 전체 초기화</button>';
     dex.innerHTML = h;
+    document.getElementById('dexDemo').onclick = function () {
+      var c = load();
+      var pool = PLAYERS.filter(function (p) { return !c[cid(p)]; });
+      var p = pool.length ? pool[Math.floor(Math.random() * pool.length)] : PLAYERS[Math.floor(Math.random() * PLAYERS.length)];
+      collect(p); updateNav();
+      showView('fortune');
+      setTimeout(function () { showNewBanner(p); }, 120);
+    };
     document.getElementById('dexTest').onclick = function () {
       var c = load(), added = 0, tries = 0;
       while (added < 5 && tries < 300) {
