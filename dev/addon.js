@@ -9,28 +9,94 @@
   function cid(p) { return slugOf(p); }
   function ownedCount() { return Object.keys(load()).length; }
 
-  /* 수집: 새 카드면 'new', 이미 가진 카드면 'dupe'(꽝). 오늘 처음이면 new 유지 */
+  /* 수집: 한 번도 없던 카드만 'new', 이미 가진 건 'dupe'(꽝) */
   function collect(p) {
-    var c = load(), id = cid(p), t = tkey();
-    if (!c[id]) { c[id] = t; save(c); return 'new'; }
-    if (c[id] === t) return 'new';
+    var c = load(), id = cid(p);
+    if (!c[id]) { c[id] = tkey(); save(c); return 'new'; }
     return 'dupe';
   }
+  var justAddedId = null;
 
-  /* ---- 수집 토스트 ---- */
+  /* ---- 꽝 토스트 (작게) ---- */
   var toast = document.createElement('div');
   toast.className = 'collect-toast';
   document.body.appendChild(toast);
   var toastT;
-  function showToast(st) {
-    toast.className = 'collect-toast ' + (st === 'new' ? 'new' : 'dupe');
-    toast.textContent = st === 'new' ? '도감에 새 카드 등록! 탭하면 도감으로 ✨' : '이미 보유 — 꽝!';
-    toast.style.pointerEvents = st === 'new' ? 'auto' : 'none';
-    toast.style.cursor = st === 'new' ? 'pointer' : 'default';
-    toast.onclick = st === 'new' ? function () { showView('dex'); toast.classList.remove('show'); } : null;
+  function showDupe() {
+    toast.className = 'collect-toast dupe';
+    toast.textContent = '이미 보유한 카드 — 꽝!';
     requestAnimationFrame(function () { toast.classList.add('show'); });
     clearTimeout(toastT);
-    toastT = setTimeout(function () { toast.classList.remove('show'); }, 2600);
+    toastT = setTimeout(function () { toast.classList.remove('show'); }, 2000);
+  }
+
+  /* ---- NEW 카드 배너 (크게) ---- */
+  var banner = document.createElement('div');
+  banner.className = 'newcard-banner';
+  document.body.appendChild(banner);
+  var bannerT;
+  function showNewBanner(p) {
+    banner.innerHTML = '<div class="nc-tag">NEW CARD ✨</div>' +
+      '<div class="nc-title"><b>' + p.name + '</b> 획득!</div>' +
+      '<button class="nc-btn" id="ncReg">📖 도감에 등록하기 →</button>';
+    banner.classList.add('show');
+    document.getElementById('ncReg').onclick = function () {
+      banner.classList.remove('show');
+      flyToDex(p, function () { justAddedId = cid(p); showView('dex'); });
+    };
+    clearTimeout(bannerT);
+    bannerT = setTimeout(function () { banner.classList.remove('show'); }, 5000);
+  }
+
+  /* ---- 카드 → 도감 플라이 모션 ---- */
+  function flyToDex(p, cb) {
+    var box = document.querySelector('.flip-box');
+    var navb = nav.querySelector('button[data-v="dex"]');
+    if (!box || !navb) { if (cb) cb(); return; }
+    var r1 = box.getBoundingClientRect(), r2 = navb.getBoundingClientRect();
+    var fly = document.createElement('div');
+    fly.className = 'card-fly t-' + p.tier;
+    fly.style.left = r1.left + 'px'; fly.style.top = r1.top + 'px';
+    fly.style.width = r1.width + 'px'; fly.style.height = r1.height + 'px';
+    fly.innerHTML = p.img ? '<img src="' + p.img + '" alt="">' :
+      '<span class="cf-ini">' + p.en.split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2) + '</span>';
+    document.body.appendChild(fly);
+    var dx = (r2.left + r2.width / 2) - (r1.left + r1.width / 2);
+    var dy = (r2.top + r2.height / 2) - (r1.top + r1.height / 2);
+    requestAnimationFrame(function () {
+      fly.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(0.05) rotate(10deg)';
+      fly.style.opacity = '0.2';
+    });
+    setTimeout(function () {
+      fly.remove();
+      navb.classList.remove('newglow'); void navb.offsetWidth; navb.classList.add('newglow');
+      if (cb) cb();
+    }, 720);
+  }
+
+  /* ---- 카드 상세 모달 ---- */
+  function openCardModal(p) {
+    var m = document.getElementById('dexModal');
+    if (!m) { m = document.createElement('div'); m.id = 'dexModal'; m.className = 'dex-modal'; document.body.appendChild(m); }
+    var photo = p.img ? '<img src="' + p.img + '" alt="">' :
+      '<div class="fut-fallback">' + p.en.split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2) + '</div>';
+    var badge = p.tier === 'ultra' ? '⚜ THE INVINCIBLE' : p.tier === 'legend' ? '★ LEGEND' :
+      p.tier === 'manager' ? '◆ HEAD COACH' : p.tier === 'star' ? '★ STAR' : 'FIRST TEAM';
+    m.innerHTML = '<div class="dm-wrap">' +
+      '<div class="card-face card-front-face t-' + p.tier + '">' +
+        '<div class="fut-top"><span class="fut-num">' + p.num + '</span><span class="fut-pos">' + p.pos + '</span></div>' +
+        '<span class="p-badge">' + badge + '</span>' +
+        '<div class="fut-photo">' + photo + '</div>' +
+        '<div class="fut-body"><div class="fut-name">' + p.name + '</div><div class="fut-name-en">' + p.en + '</div>' +
+        '<p class="fut-chant">' + p.chant + '</p><div class="fut-chant-label">' + (p.real ? '— 실제 에미레이츠 챈트 🎵' : '— 오늘의 응원') + '</div></div>' +
+      '</div>' +
+      '<p class="dm-cheer">' + p.cheer + '</p>' +
+      '<button class="dm-close">닫기</button>' +
+      '</div>';
+    m.classList.add('show');
+    m.onclick = function (e) {
+      if (e.target === m || (e.target.className && e.target.className.indexOf('dm-close') >= 0)) m.classList.remove('show');
+    };
   }
 
   /* ---- flipCard 후킹: 카드 공개되면 수집 ---- */
@@ -43,10 +109,13 @@
       var st = collect(currentPlayer);
       var d = currentPlayer.tier === 'ultra' ? 1900 : currentPlayer.tier === 'legend' ? 1700 : 1100;
       setTimeout(function () {
-        showToast(st); updateNav();
+        updateNav();
         if (st === 'new') {
+          showNewBanner(currentPlayer);
           var db = nav.querySelector('button[data-v="dex"]');
           if (db) { db.classList.remove('newglow'); void db.offsetWidth; db.classList.add('newglow'); }
+        } else {
+          showDupe();
         }
       }, d);
     }
@@ -102,7 +171,8 @@
         if (own[cid(p)]) {
           var inner = p.img ? '<img src="' + p.img + '" alt="">'
             : '<div class="dexc-ini">' + p.en.split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2) + '</div>';
-          h += '<div class="dexc owned t-' + p.tier + '"><div class="dexc-num">' + p.num + '</div>' +
+          var jc = (cid(p) === justAddedId) ? ' just' : '';
+          h += '<div class="dexc owned t-' + p.tier + jc + '" data-pi="' + PLAYERS.indexOf(p) + '"><div class="dexc-num">' + p.num + '</div>' +
             '<div class="dexc-ph">' + inner + '</div><div class="dexc-nm">' + p.name + '</div></div>';
         } else {
           h += '<div class="dexc locked"><span class="dexc-q">?</span><div class="dexc-nm">???</div></div>';
@@ -123,8 +193,13 @@
       save(c); renderDex(); updateNav();
     };
     document.getElementById('dexReset').onclick = function () {
-      localStorage.removeItem(KEY); renderDex(); updateNav();
+      localStorage.removeItem(KEY); localStorage.removeItem('gDexSeen'); renderDex(); updateNav();
     };
+    var owns = dex.querySelectorAll('.dexc.owned');
+    for (var k = 0; k < owns.length; k++) {
+      (function (el) { el.onclick = function () { openCardModal(PLAYERS[+el.dataset.pi]); }; })(owns[k]);
+    }
+    justAddedId = null;
   }
 
   function getSeen() { return parseInt(localStorage.getItem('gDexSeen') || '0', 10) || 0; }
