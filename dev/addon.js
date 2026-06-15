@@ -42,7 +42,13 @@
     banner.classList.add('show');
     document.getElementById('ncReg').onclick = function () {
       banner.classList.remove('show');
-      flyToDex(p, function () { justAddedId = cid(p); showView('dex'); });
+      flyToDex(p, function () {
+        /* 자동 이동 X — 도감 아이콘이 계속 반짝여서 유저가 직접 누르게 */
+        justAddedId = cid(p);
+        var db = nav.querySelector('button[data-v="dex"]');
+        if (db) db.classList.add('invite');
+        updateNav();
+      });
     };
     clearTimeout(bannerT);
     bannerT = setTimeout(function () { banner.classList.remove('show'); }, 5000);
@@ -78,7 +84,7 @@
     var dx = (r2.left + r2.width / 2) - (r1.left + r1.width / 2);
     var dy = (r2.top + r2.height / 2) - (r1.top + r1.height / 2);
     requestAnimationFrame(function () {
-      fly.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(0.04)';
+      fly.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(0.04) rotate(540deg)';
       fly.style.opacity = '0';
     });
     setTimeout(function () {
@@ -145,7 +151,7 @@
       dex.classList.add('show'); renderDex(); window.scrollTo(0, 0);
       localStorage.setItem('gDexSeen', String(ownedCount()));
       var db = nav.querySelector('button[data-v="dex"]');
-      if (db) db.classList.remove('newglow');
+      if (db) { db.classList.remove('newglow'); db.classList.remove('invite'); }
       updateNav();
     } else {
       dex.classList.remove('show');

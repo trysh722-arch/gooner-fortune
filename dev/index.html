@@ -805,6 +805,11 @@
 /* 새 카드 시 도감 버튼 글로우 */
 #dexNav button.newglow { color: var(--red-text); animation: dexGlow 1s ease 3; }
 @keyframes dexGlow { 0%,100% { text-shadow: none; } 50% { text-shadow: 0 0 12px rgba(239,1,7,0.9); } }
+/* 등록 후 도감으로 유도: 계속 반짝 (탭하면 해제) */
+#dexNav button.invite { color: var(--red-text); animation: dexInvite 1.3s ease-in-out infinite; }
+@keyframes dexInvite { 0%,100% { text-shadow: 0 0 4px rgba(239,1,7,0.3); } 50% { text-shadow: 0 0 18px rgba(239,1,7,0.95); } }
+#dexNav button.invite .ic { animation: dexInviteIc 1.3s ease-in-out infinite; }
+@keyframes dexInviteIc { 0%,100% { transform: scale(1); } 50% { transform: scale(1.18); } }
 
 /* 도감 본문 */
 #dex { display: none; }
@@ -1665,7 +1670,13 @@ if (qs.get('birth')) {
     banner.classList.add('show');
     document.getElementById('ncReg').onclick = function () {
       banner.classList.remove('show');
-      flyToDex(p, function () { justAddedId = cid(p); showView('dex'); });
+      flyToDex(p, function () {
+        /* 자동 이동 X — 도감 아이콘이 계속 반짝여서 유저가 직접 누르게 */
+        justAddedId = cid(p);
+        var db = nav.querySelector('button[data-v="dex"]');
+        if (db) db.classList.add('invite');
+        updateNav();
+      });
     };
     clearTimeout(bannerT);
     bannerT = setTimeout(function () { banner.classList.remove('show'); }, 5000);
@@ -1701,7 +1712,7 @@ if (qs.get('birth')) {
     var dx = (r2.left + r2.width / 2) - (r1.left + r1.width / 2);
     var dy = (r2.top + r2.height / 2) - (r1.top + r1.height / 2);
     requestAnimationFrame(function () {
-      fly.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(0.04)';
+      fly.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(0.04) rotate(540deg)';
       fly.style.opacity = '0';
     });
     setTimeout(function () {
@@ -1768,7 +1779,7 @@ if (qs.get('birth')) {
       dex.classList.add('show'); renderDex(); window.scrollTo(0, 0);
       localStorage.setItem('gDexSeen', String(ownedCount()));
       var db = nav.querySelector('button[data-v="dex"]');
-      if (db) db.classList.remove('newglow');
+      if (db) { db.classList.remove('newglow'); db.classList.remove('invite'); }
       updateNav();
     } else {
       dex.classList.remove('show');

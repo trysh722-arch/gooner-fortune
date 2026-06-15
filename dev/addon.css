@@ -27,6 +27,11 @@
 /* 새 카드 시 도감 버튼 글로우 */
 #dexNav button.newglow { color: var(--red-text); animation: dexGlow 1s ease 3; }
 @keyframes dexGlow { 0%,100% { text-shadow: none; } 50% { text-shadow: 0 0 12px rgba(239,1,7,0.9); } }
+/* 등록 후 도감으로 유도: 계속 반짝 (탭하면 해제) */
+#dexNav button.invite { color: var(--red-text); animation: dexInvite 1.3s ease-in-out infinite; }
+@keyframes dexInvite { 0%,100% { text-shadow: 0 0 4px rgba(239,1,7,0.3); } 50% { text-shadow: 0 0 18px rgba(239,1,7,0.95); } }
+#dexNav button.invite .ic { animation: dexInviteIc 1.3s ease-in-out infinite; }
+@keyframes dexInviteIc { 0%,100% { transform: scale(1); } 50% { transform: scale(1.18); } }
 
 /* 도감 본문 */
 #dex { display: none; }
