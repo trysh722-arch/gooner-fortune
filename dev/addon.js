@@ -48,7 +48,22 @@
     bannerT = setTimeout(function () { banner.classList.remove('show'); }, 5000);
   }
 
-  /* ---- 카드 → 도감 플라이 모션 ---- */
+  /* 카드 앞면 HTML (모달/플라이 공용) */
+  function cardFaceHtml(p) {
+    var photo = p.img ? '<img src="' + p.img + '" alt="">' :
+      '<div class="fut-fallback">' + p.en.split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2) + '</div>';
+    var badge = p.tier === 'ultra' ? '⚜ THE INVINCIBLE' : p.tier === 'legend' ? '★ LEGEND' :
+      p.tier === 'manager' ? '◆ HEAD COACH' : p.tier === 'star' ? '★ STAR' : 'FIRST TEAM';
+    return '<div class="card-face card-front-face t-' + p.tier + '">' +
+      '<div class="fut-top"><span class="fut-num">' + p.num + '</span><span class="fut-pos">' + p.pos + '</span></div>' +
+      '<span class="p-badge">' + badge + '</span>' +
+      '<div class="fut-photo">' + photo + '</div>' +
+      '<div class="fut-body"><div class="fut-name">' + p.name + '</div><div class="fut-name-en">' + p.en + '</div>' +
+      '<p class="fut-chant">' + p.chant + '</p><div class="fut-chant-label">' + (p.real ? '— 실제 에미레이츠 챈트 🎵' : '— 오늘의 응원') + '</div></div>' +
+      '</div>';
+  }
+
+  /* ---- 카드 → 도감 플라이 모션 (실제 카드가 도감으로 부드럽게 흡수) ---- */
   function flyToDex(p, cb) {
     var box = document.querySelector('.flip-box');
     var navb = nav.querySelector('button[data-v="dex"]');
@@ -58,38 +73,26 @@
     fly.className = 'card-fly t-' + p.tier;
     fly.style.left = r1.left + 'px'; fly.style.top = r1.top + 'px';
     fly.style.width = r1.width + 'px'; fly.style.height = r1.height + 'px';
-    fly.innerHTML = p.img ? '<img src="' + p.img + '" alt="">' :
-      '<span class="cf-ini">' + p.en.split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2) + '</span>';
+    fly.innerHTML = cardFaceHtml(p);
     document.body.appendChild(fly);
     var dx = (r2.left + r2.width / 2) - (r1.left + r1.width / 2);
     var dy = (r2.top + r2.height / 2) - (r1.top + r1.height / 2);
     requestAnimationFrame(function () {
-      fly.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(0.05) rotate(10deg)';
-      fly.style.opacity = '0.2';
+      fly.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(0.04)';
+      fly.style.opacity = '0';
     });
     setTimeout(function () {
       fly.remove();
-      navb.classList.remove('newglow'); void navb.offsetWidth; navb.classList.add('newglow');
+      navb.classList.remove('absorb'); void navb.offsetWidth; navb.classList.add('absorb');
       if (cb) cb();
-    }, 720);
+    }, 780);
   }
 
   /* ---- 카드 상세 모달 ---- */
   function openCardModal(p) {
     var m = document.getElementById('dexModal');
     if (!m) { m = document.createElement('div'); m.id = 'dexModal'; m.className = 'dex-modal'; document.body.appendChild(m); }
-    var photo = p.img ? '<img src="' + p.img + '" alt="">' :
-      '<div class="fut-fallback">' + p.en.split(' ').map(function (w) { return w[0]; }).join('').slice(0, 2) + '</div>';
-    var badge = p.tier === 'ultra' ? '⚜ THE INVINCIBLE' : p.tier === 'legend' ? '★ LEGEND' :
-      p.tier === 'manager' ? '◆ HEAD COACH' : p.tier === 'star' ? '★ STAR' : 'FIRST TEAM';
-    m.innerHTML = '<div class="dm-wrap">' +
-      '<div class="card-face card-front-face t-' + p.tier + '">' +
-        '<div class="fut-top"><span class="fut-num">' + p.num + '</span><span class="fut-pos">' + p.pos + '</span></div>' +
-        '<span class="p-badge">' + badge + '</span>' +
-        '<div class="fut-photo">' + photo + '</div>' +
-        '<div class="fut-body"><div class="fut-name">' + p.name + '</div><div class="fut-name-en">' + p.en + '</div>' +
-        '<p class="fut-chant">' + p.chant + '</p><div class="fut-chant-label">' + (p.real ? '— 실제 에미레이츠 챈트 🎵' : '— 오늘의 응원') + '</div></div>' +
-      '</div>' +
+    m.innerHTML = '<div class="dm-wrap">' + cardFaceHtml(p) +
       '<p class="dm-cheer">' + p.cheer + '</p>' +
       '<button class="dm-close">닫기</button>' +
       '</div>';
@@ -188,9 +191,19 @@
       var c = load();
       var pool = PLAYERS.filter(function (p) { return !c[cid(p)]; });
       var p = pool.length ? pool[Math.floor(Math.random() * pool.length)] : PLAYERS[Math.floor(Math.random() * PLAYERS.length)];
+      /* 그 선수 카드를 실제로 띄움(앞면) → 배너/플라이가 화면 카드와 100% 일치 */
+      document.getElementById('gate').style.display = 'none';
+      dex.classList.remove('show');
+      document.getElementById('pitch').style.display = 'block';
+      var nb = nav.querySelectorAll('button');
+      for (var i = 0; i < nb.length; i++) nb[i].classList.toggle('active', nb[i].dataset.v === 'fortune');
+      window.scrollTo(0, 0);
+      currentPlayer = p;
+      if (typeof renderPlayer === 'function') renderPlayer(p);
+      var card = document.getElementById('flipCard');
+      if (card) card.classList.add('flipped');
       collect(p); updateNav();
-      showView('fortune');
-      setTimeout(function () { showNewBanner(p); }, 120);
+      setTimeout(function () { showNewBanner(p); }, 280);
     };
     document.getElementById('dexTest').onclick = function () {
       var c = load(), added = 0, tries = 0;
