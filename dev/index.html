@@ -792,7 +792,19 @@
   padding: 10px 6px; cursor: pointer;
 }
 #dexNav button.active { color: #fff; }
-#dexNav .ic { display: block; font-size: 21px; margin-bottom: 3px; }
+#dexNav .ic { display: block; font-size: 21px; margin-bottom: 3px; position: relative; }
+#dexNav button { position: relative; }
+/* NEW 알림 점 */
+.dex-dot {
+  display: none; position: absolute; top: 6px; right: calc(50% - 26px);
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--red-bright); box-shadow: 0 0 0 2px rgba(14,14,20,0.96);
+  animation: dexDotPulse 1.4s ease-in-out infinite;
+}
+@keyframes dexDotPulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.6; } }
+/* 새 카드 시 도감 버튼 글로우 */
+#dexNav button.newglow { color: var(--red-text); animation: dexGlow 1s ease 3; }
+@keyframes dexGlow { 0%,100% { text-shadow: none; } 50% { text-shadow: 0 0 12px rgba(239,1,7,0.9); } }
 
 /* 도감 본문 */
 #dex { display: none; }
@@ -1103,7 +1115,7 @@ const PLAYERS = [
     chant: 'Vieira, whoa-oh-oh-oh!\nHe comes from Senegal,\nhe plays for Arsenal! 🎵',
     real: true,
     cheer: '무패우승 시즌의 주장 카드야. 그 시즌 아스날은 안 풀리는 날에도 비기면서 버텼어. 완벽하지 않아도 무너지지만 않으면 이기는 거다.' },
-  { img: null, name: '이안 라이트', en: 'IAN WRIGHT', num: 8, pos: 'FW', tier: 'legend',
+  { img: 'img/wright.png', name: '이안 라이트', en: 'IAN WRIGHT', num: 8, pos: 'FW', tier: 'legend',
     chant: 'Ian Wright Wright Wright! 🎵',
     real: true,
     cheer: '라이트는 골 넣으면 세상에서 제일 신나게 웃는 선수였어. 좋은 일이 생기면 참지 말고 티 내. 자랑할 사람한테 바로 연락하고.' },
@@ -1604,10 +1616,13 @@ if (qs.get('birth')) {
   var toastT;
   function showToast(st) {
     toast.className = 'collect-toast ' + (st === 'new' ? 'new' : 'dupe');
-    toast.textContent = st === 'new' ? '도감 등록 완료! NEW ✨' : '이미 보유 — 꽝!';
+    toast.textContent = st === 'new' ? '도감에 새 카드 등록! 탭하면 도감으로 ✨' : '이미 보유 — 꽝!';
+    toast.style.pointerEvents = st === 'new' ? 'auto' : 'none';
+    toast.style.cursor = st === 'new' ? 'pointer' : 'default';
+    toast.onclick = st === 'new' ? function () { showView('dex'); toast.classList.remove('show'); } : null;
     requestAnimationFrame(function () { toast.classList.add('show'); });
     clearTimeout(toastT);
-    toastT = setTimeout(function () { toast.classList.remove('show'); }, 2200);
+    toastT = setTimeout(function () { toast.classList.remove('show'); }, 2600);
   }
 
   /* ---- flipCard 후킹: 카드 공개되면 수집 ---- */
@@ -1619,7 +1634,13 @@ if (qs.get('birth')) {
     if (!was && typeof currentPlayer !== 'undefined' && currentPlayer) {
       var st = collect(currentPlayer);
       var d = currentPlayer.tier === 'ultra' ? 1900 : currentPlayer.tier === 'legend' ? 1700 : 1100;
-      setTimeout(function () { showToast(st); updateNav(); }, d);
+      setTimeout(function () {
+        showToast(st); updateNav();
+        if (st === 'new') {
+          var db = nav.querySelector('button[data-v="dex"]');
+          if (db) { db.classList.remove('newglow'); void db.offsetWidth; db.classList.add('newglow'); }
+        }
+      }, d);
     }
   };
 
@@ -1628,7 +1649,7 @@ if (qs.get('birth')) {
   nav.id = 'dexNav';
   nav.innerHTML =
     '<button data-v="fortune" class="active"><span class="ic">🃏</span>운세</button>' +
-    '<button data-v="dex"><span class="ic">📖</span><span id="dexNavLbl">도감</span></button>';
+    '<button data-v="dex"><span class="dex-dot" id="dexDot"></span><span class="ic">📖</span><span id="dexNavLbl">도감</span></button>';
   document.body.appendChild(nav);
 
   var dex = document.createElement('section');
@@ -1642,6 +1663,10 @@ if (qs.get('birth')) {
     if (v === 'dex') {
       gate.style.display = 'none'; pitch.style.display = 'none';
       dex.classList.add('show'); renderDex(); window.scrollTo(0, 0);
+      localStorage.setItem('gDexSeen', String(ownedCount()));
+      var db = nav.querySelector('button[data-v="dex"]');
+      if (db) db.classList.remove('newglow');
+      updateNav();
     } else {
       dex.classList.remove('show');
       if (typeof currentFortune !== 'undefined' && currentFortune) pitch.style.display = 'block';
@@ -1694,9 +1719,13 @@ if (qs.get('birth')) {
     };
   }
 
+  function getSeen() { return parseInt(localStorage.getItem('gDexSeen') || '0', 10) || 0; }
   function updateNav() {
+    var owned = ownedCount();
     var lbl = document.getElementById('dexNavLbl');
-    if (lbl) lbl.textContent = '도감 ' + ownedCount() + '/' + TOTAL;
+    if (lbl) lbl.textContent = '도감 ' + owned + '/' + TOTAL;
+    var dot = document.getElementById('dexDot');
+    if (dot) dot.style.display = (owned > getSeen()) ? 'block' : 'none';
   }
   updateNav();
 })();

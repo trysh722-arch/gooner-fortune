@@ -14,7 +14,19 @@
   padding: 10px 6px; cursor: pointer;
 }
 #dexNav button.active { color: #fff; }
-#dexNav .ic { display: block; font-size: 21px; margin-bottom: 3px; }
+#dexNav .ic { display: block; font-size: 21px; margin-bottom: 3px; position: relative; }
+#dexNav button { position: relative; }
+/* NEW 알림 점 */
+.dex-dot {
+  display: none; position: absolute; top: 6px; right: calc(50% - 26px);
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--red-bright); box-shadow: 0 0 0 2px rgba(14,14,20,0.96);
+  animation: dexDotPulse 1.4s ease-in-out infinite;
+}
+@keyframes dexDotPulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.6; } }
+/* 새 카드 시 도감 버튼 글로우 */
+#dexNav button.newglow { color: var(--red-text); animation: dexGlow 1s ease 3; }
+@keyframes dexGlow { 0%,100% { text-shadow: none; } 50% { text-shadow: 0 0 12px rgba(239,1,7,0.9); } }
 
 /* 도감 본문 */
 #dex { display: none; }

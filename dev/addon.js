@@ -24,10 +24,13 @@
   var toastT;
   function showToast(st) {
     toast.className = 'collect-toast ' + (st === 'new' ? 'new' : 'dupe');
-    toast.textContent = st === 'new' ? '도감 등록 완료! NEW ✨' : '이미 보유 — 꽝!';
+    toast.textContent = st === 'new' ? '도감에 새 카드 등록! 탭하면 도감으로 ✨' : '이미 보유 — 꽝!';
+    toast.style.pointerEvents = st === 'new' ? 'auto' : 'none';
+    toast.style.cursor = st === 'new' ? 'pointer' : 'default';
+    toast.onclick = st === 'new' ? function () { showView('dex'); toast.classList.remove('show'); } : null;
     requestAnimationFrame(function () { toast.classList.add('show'); });
     clearTimeout(toastT);
-    toastT = setTimeout(function () { toast.classList.remove('show'); }, 2200);
+    toastT = setTimeout(function () { toast.classList.remove('show'); }, 2600);
   }
 
   /* ---- flipCard 후킹: 카드 공개되면 수집 ---- */
@@ -39,7 +42,13 @@
     if (!was && typeof currentPlayer !== 'undefined' && currentPlayer) {
       var st = collect(currentPlayer);
       var d = currentPlayer.tier === 'ultra' ? 1900 : currentPlayer.tier === 'legend' ? 1700 : 1100;
-      setTimeout(function () { showToast(st); updateNav(); }, d);
+      setTimeout(function () {
+        showToast(st); updateNav();
+        if (st === 'new') {
+          var db = nav.querySelector('button[data-v="dex"]');
+          if (db) { db.classList.remove('newglow'); void db.offsetWidth; db.classList.add('newglow'); }
+        }
+      }, d);
     }
   };
 
@@ -48,7 +57,7 @@
   nav.id = 'dexNav';
   nav.innerHTML =
     '<button data-v="fortune" class="active"><span class="ic">🃏</span>운세</button>' +
-    '<button data-v="dex"><span class="ic">📖</span><span id="dexNavLbl">도감</span></button>';
+    '<button data-v="dex"><span class="dex-dot" id="dexDot"></span><span class="ic">📖</span><span id="dexNavLbl">도감</span></button>';
   document.body.appendChild(nav);
 
   var dex = document.createElement('section');
@@ -62,6 +71,10 @@
     if (v === 'dex') {
       gate.style.display = 'none'; pitch.style.display = 'none';
       dex.classList.add('show'); renderDex(); window.scrollTo(0, 0);
+      localStorage.setItem('gDexSeen', String(ownedCount()));
+      var db = nav.querySelector('button[data-v="dex"]');
+      if (db) db.classList.remove('newglow');
+      updateNav();
     } else {
       dex.classList.remove('show');
       if (typeof currentFortune !== 'undefined' && currentFortune) pitch.style.display = 'block';
@@ -114,9 +127,13 @@
     };
   }
 
+  function getSeen() { return parseInt(localStorage.getItem('gDexSeen') || '0', 10) || 0; }
   function updateNav() {
+    var owned = ownedCount();
     var lbl = document.getElementById('dexNavLbl');
-    if (lbl) lbl.textContent = '도감 ' + ownedCount() + '/' + TOTAL;
+    if (lbl) lbl.textContent = '도감 ' + owned + '/' + TOTAL;
+    var dot = document.getElementById('dexDot');
+    if (dot) dot.style.display = (owned > getSeen()) ? 'block' : 'none';
   }
   updateNav();
 })();
