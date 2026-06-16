@@ -199,7 +199,7 @@
       });
       h += '</div>';
     });
-    var DEV = location.pathname.indexOf('/dev/') >= 0;
+    var DEV = location.pathname.indexOf('/dev/') >= 0 || window.__DEVTEST === true;
     if (DEV) h += '<button id="dexDemo">🎬 새 카드 획득 연출 다시보기</button>' +
       '<button id="dexTest">🎲 테스트로 랜덤 5장 모으기</button>' +
       '<button id="dexReset">⚠️ 도감 전체 초기화</button>';
