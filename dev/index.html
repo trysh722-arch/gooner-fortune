@@ -844,10 +844,12 @@
 @keyframes sheetUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 .sq-pick-h { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 4px; text-align: center; }
 .sq-pick-hint { font-size: 11px; color: var(--ink-dim); text-align: center; margin-bottom: 12px; letter-spacing: 1px; }
-.sq-pick-row { display: flex; overflow-x: auto; gap: 12px; padding: 4px 16px 14px; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; }
+.sq-pick-row { display: flex; align-items: center; overflow-x: auto; gap: 8px; padding: 26px calc(50% - 70px) 26px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; perspective: 1000px; }
 .sq-pick-row::-webkit-scrollbar { height: 0; }
-.sq-pick-c { flex: 0 0 132px; width: 132px; aspect-ratio: 0.66; scroll-snap-align: center; border-radius: 12px; position: relative; overflow: hidden; cursor: pointer; background: radial-gradient(120% 70% at 50% 0%,#26262e,#0e0e13); border: 1px solid var(--line); transition: transform 0.15s ease; }
-.sq-pick-c:active { transform: scale(0.95); }
+.sq-pick-c { flex: 0 0 140px; width: 140px; aspect-ratio: 0.66; scroll-snap-align: center; border-radius: 13px; position: relative; overflow: hidden; cursor: pointer; background: radial-gradient(120% 70% at 50% 0%,#26262e,#0e0e13); border: 1px solid var(--line); transform-origin: center center; transition: transform 0.28s cubic-bezier(0.2,0.8,0.3,1), opacity 0.28s ease, box-shadow 0.28s ease; will-change: transform; }
+.sq-pick-c.focus { box-shadow: 0 14px 36px rgba(0,0,0,0.55); }
+.sq-pick-c.focus.t-star { box-shadow: 0 14px 40px rgba(239,1,7,0.45); }
+.sq-pick-c.focus.t-legend, .sq-pick-c.focus.t-ultra { box-shadow: 0 14px 44px rgba(201,162,60,0.55); }
 .sq-pick-c.t-standard { background: radial-gradient(120% 70% at 50% 0%,#f3f3f6,#e9e9ee); }
 .sq-pick-c.t-legend, .sq-pick-c.t-ultra { background: radial-gradient(120% 75% at 50% 0%,#f3e5bd,#e2c887); }
 .sq-pick-c .ph { position:absolute; inset:0 0 16px 0; display:flex; align-items:flex-end; justify-content:center; }
@@ -1708,6 +1710,28 @@ if (qs.get('birth')) {
     for (var j = 0; j < cards.length; j++) (function (el) { el.onclick = function () { opts.onPick(el.dataset.id); pick.classList.remove('show'); }; })(cards[j]);
     var cl = document.getElementById('sqClear'); if (cl) cl.onclick = function () { opts.onClear(); pick.classList.remove('show'); };
     document.getElementById('sqCancel').onclick = function () { pick.classList.remove('show'); };
+
+    /* 커버플로우: 가운데 카드 포커스(크게) + 양옆 기울임 */
+    var row = pick.querySelector('.sq-pick-row');
+    if (row) {
+      var raf;
+      var updateFocus = function () {
+        var rc = row.getBoundingClientRect(), cx = rc.left + rc.width / 2;
+        var cs = row.querySelectorAll('.sq-pick-c');
+        for (var i = 0; i < cs.length; i++) {
+          var b = cs[i].getBoundingClientRect(), d = (b.left + b.width / 2 - cx) / b.width;
+          var ad = Math.min(1.4, Math.abs(d));
+          var scale = Math.max(0.7, 1.1 - ad * 0.32);
+          var rot = Math.max(-34, Math.min(34, -d * 26));
+          cs[i].style.transform = 'rotateY(' + rot + 'deg) scale(' + scale + ')';
+          cs[i].style.opacity = String(Math.max(0.42, 1 - ad * 0.45));
+          cs[i].style.zIndex = String(100 - Math.round(ad * 50));
+          cs[i].classList.toggle('focus', ad < 0.3);
+        }
+      };
+      row.addEventListener('scroll', function () { if (raf) cancelAnimationFrame(raf); raf = requestAnimationFrame(updateFocus); });
+      setTimeout(updateFocus, 30);
+    }
   }
   pick.onclick = function (e) { if (e.target === pick) pick.classList.remove('show'); };
 

@@ -99,6 +99,28 @@
     for (var j = 0; j < cards.length; j++) (function (el) { el.onclick = function () { opts.onPick(el.dataset.id); pick.classList.remove('show'); }; })(cards[j]);
     var cl = document.getElementById('sqClear'); if (cl) cl.onclick = function () { opts.onClear(); pick.classList.remove('show'); };
     document.getElementById('sqCancel').onclick = function () { pick.classList.remove('show'); };
+
+    /* 커버플로우: 가운데 카드 포커스(크게) + 양옆 기울임 */
+    var row = pick.querySelector('.sq-pick-row');
+    if (row) {
+      var raf;
+      var updateFocus = function () {
+        var rc = row.getBoundingClientRect(), cx = rc.left + rc.width / 2;
+        var cs = row.querySelectorAll('.sq-pick-c');
+        for (var i = 0; i < cs.length; i++) {
+          var b = cs[i].getBoundingClientRect(), d = (b.left + b.width / 2 - cx) / b.width;
+          var ad = Math.min(1.4, Math.abs(d));
+          var scale = Math.max(0.7, 1.1 - ad * 0.32);
+          var rot = Math.max(-34, Math.min(34, -d * 26));
+          cs[i].style.transform = 'rotateY(' + rot + 'deg) scale(' + scale + ')';
+          cs[i].style.opacity = String(Math.max(0.42, 1 - ad * 0.45));
+          cs[i].style.zIndex = String(100 - Math.round(ad * 50));
+          cs[i].classList.toggle('focus', ad < 0.3);
+        }
+      };
+      row.addEventListener('scroll', function () { if (raf) cancelAnimationFrame(raf); raf = requestAnimationFrame(updateFocus); });
+      setTimeout(updateFocus, 30);
+    }
   }
   pick.onclick = function (e) { if (e.target === pick) pick.classList.remove('show'); };
 
