@@ -18,11 +18,22 @@
   function cid(p) { return slugOf(p); }
   function playerById(id) { for (var i = 0; i < PLAYERS.length; i++) if (cid(PLAYERS[i]) === id) return PLAYERS[i]; return null; }
   function ovrOf(p) { return OVR[p.tier] || 78; }
-  function loadSquad() {
-    var d = { formation: '4-3-3', slots: {}, manager: null };
-    try { var s = JSON.parse(localStorage.getItem(SQ_KEY) || 'null'); return s ? s : d; } catch (e) { return d; }
+  /* 포메이션별로 각각 라인업 저장: { cur:'4-3-3', f:{ '4-3-3':{slots,manager}, ... } } */
+  function loadAll() {
+    try { var a = JSON.parse(localStorage.getItem(SQ_KEY) || 'null'); if (a && a.f) return a; } catch (e) {}
+    return { cur: '4-3-3', f: {} };
   }
-  function saveSquad(s) { try { localStorage.setItem(SQ_KEY, JSON.stringify(s)); } catch (e) {} }
+  function saveAll(a) { try { localStorage.setItem(SQ_KEY, JSON.stringify(a)); } catch (e) {} }
+  function loadSquad() {
+    var a = loadAll(), f = a.f[a.cur] || { slots: {}, manager: null };
+    return { formation: a.cur, slots: f.slots || {}, manager: f.manager || null };
+  }
+  function saveSquad(s) {
+    var a = loadAll(); a.cur = s.formation; a.f[s.formation] = { slots: s.slots, manager: s.manager }; saveAll(a);
+  }
+  function setFormation(f) {
+    var a = loadAll(); a.cur = f; if (!a.f[f]) a.f[f] = { slots: {}, manager: null }; saveAll(a);
+  }
 
   function slotList(form) {
     var out = [], lines = FORMATIONS[form] || FORMATIONS['4-3-3'];
@@ -80,7 +91,8 @@
     if (opts.candidates.length) for (var i = 0; i < opts.candidates.length; i++) grid += miniCard(opts.candidates[i], 'sq-pick-c');
     else grid = '<div class="sq-pick-empty">배치할 수 있는 카드가 없어요.<br>도감에서 ' + opts.posLabel + ' 카드를 더 모아보세요.</div>';
     pick.innerHTML = '<div class="sq-pick-sheet"><div class="sq-pick-h">' + opts.title + '</div>'
-      + '<div class="sq-pick-grid">' + grid + '</div>'
+      + (opts.candidates.length ? '<div class="sq-pick-hint">← 좌우로 넘겨서 골라 →</div>' : '')
+      + '<div class="sq-pick-row">' + grid + '</div>'
       + '<div class="sq-pick-btns">' + (opts.filled ? '<button class="clear" id="sqClear">이 자리 비우기</button>' : '') + '<button id="sqCancel">닫기</button></div></div>';
     pick.classList.add('show');
     var cards = pick.querySelectorAll('.sq-pick-c');
@@ -154,7 +166,7 @@
 
     /* 이벤트 */
     var forms = panel.querySelectorAll('.sq-form');
-    for (var a = 0; a < forms.length; a++) (function (el) { el.onclick = function () { var ss = loadSquad(); ss.formation = el.dataset.f; saveSquad(ss); renderSquad(); }; })(forms[a]);
+    for (var a = 0; a < forms.length; a++) (function (el) { el.onclick = function () { setFormation(el.dataset.f); renderSquad(); }; })(forms[a]);
 
     var sl = panel.querySelectorAll('.sq-slot');
     for (var b = 0; b < sl.length; b++) (function (el) {

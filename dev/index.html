@@ -832,22 +832,29 @@
 .sq-slot.t-legend .sovr, .sq-slot.t-ultra .sovr { color:#8a6512; }
 .sq-slot .pname { font-size: 9.5px; font-weight: 700; color: #fff; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .sq-slot.empty .pname { color: var(--ink-dim); }
+.sq-slot .holder { transition: border-color 0.15s, background 0.15s, transform 0.12s; }
+.sq-slot.empty:hover .holder { border-color: var(--red); background: rgba(239,1,7,0.14); }
+.sq-slot.empty:hover .pos { color: var(--red-text); }
+.sq-slot:active .holder { transform: scale(0.93); }
 
 /* 카드 선택 시트 */
-.sq-pick { position: fixed; inset: 0; z-index: 72; background: rgba(6,6,9,0.82); backdrop-filter: blur(4px); display: none; align-items: flex-end; }
+.sq-pick { position: fixed; inset: 0; z-index: 72; background: rgba(4,4,7,0.7); backdrop-filter: blur(9px); -webkit-backdrop-filter: blur(9px); display: none; align-items: flex-end; }
 .sq-pick.show { display: flex; }
-.sq-pick-sheet { background: var(--surface); border-top-left-radius: 20px; border-top-right-radius: 20px; width: 100%; max-height: 70vh; overflow-y: auto; padding: 18px 16px calc(20px + env(safe-area-inset-bottom)); animation: sheetUp 0.3s ease both; }
-@keyframes sheetUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-.sq-pick-h { font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 14px; text-align: center; }
-.sq-pick-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
-.sq-pick-c { aspect-ratio: 0.74; border-radius: 10px; position: relative; overflow: hidden; cursor: pointer; background: radial-gradient(120% 70% at 50% 0%,#26262e,#0e0e13); border: 1px solid var(--line); }
+.sq-pick-sheet { background: linear-gradient(180deg,#1a1a20,#121217); border-top: 1px solid rgba(255,255,255,0.08); border-top-left-radius: 22px; border-top-right-radius: 22px; width: 100%; max-height: 78vh; overflow-y: auto; padding: 18px 0 calc(18px + env(safe-area-inset-bottom)); animation: sheetUp 0.32s cubic-bezier(0.2,0.8,0.3,1) both; box-shadow: 0 -12px 40px rgba(0,0,0,0.5); }
+@keyframes sheetUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.sq-pick-h { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 4px; text-align: center; }
+.sq-pick-hint { font-size: 11px; color: var(--ink-dim); text-align: center; margin-bottom: 12px; letter-spacing: 1px; }
+.sq-pick-row { display: flex; overflow-x: auto; gap: 12px; padding: 4px 16px 14px; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; }
+.sq-pick-row::-webkit-scrollbar { height: 0; }
+.sq-pick-c { flex: 0 0 132px; width: 132px; aspect-ratio: 0.66; scroll-snap-align: center; border-radius: 12px; position: relative; overflow: hidden; cursor: pointer; background: radial-gradient(120% 70% at 50% 0%,#26262e,#0e0e13); border: 1px solid var(--line); transition: transform 0.15s ease; }
+.sq-pick-c:active { transform: scale(0.95); }
 .sq-pick-c.t-standard { background: radial-gradient(120% 70% at 50% 0%,#f3f3f6,#e9e9ee); }
 .sq-pick-c.t-legend, .sq-pick-c.t-ultra { background: radial-gradient(120% 75% at 50% 0%,#f3e5bd,#e2c887); }
 .sq-pick-c .ph { position:absolute; inset:0 0 16px 0; display:flex; align-items:flex-end; justify-content:center; }
 .sq-pick-c .ph img { max-width:100%; max-height:100%; }
-.sq-pick-c .o { position:absolute; top:3px; left:5px; font-family:'Anton',sans-serif; font-size:13px; color:var(--red); }
+.sq-pick-c .o { position:absolute; top:5px; left:8px; font-family:'Anton',sans-serif; font-size:18px; color:var(--red); z-index:2; }
 .sq-pick-c.t-legend .o, .sq-pick-c.t-ultra .o { color:#8a6512; }
-.sq-pick-c .n { position:absolute; bottom:0; left:0; right:0; font-size:9px; font-weight:800; text-align:center; padding:3px 2px; background:rgba(0,0,0,0.4); color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sq-pick-c .n { position:absolute; bottom:0; left:0; right:0; font-size:11px; font-weight:800; text-align:center; padding:5px 3px; background:rgba(0,0,0,0.4); color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .sq-pick-c.t-standard .n, .sq-pick-c.t-legend .n, .sq-pick-c.t-ultra .n { background:rgba(0,0,0,0.25); }
 .sq-pick-empty { text-align:center; color:var(--ink-dim); font-size:13px; padding: 30px 10px; line-height:1.7; }
 .sq-pick-btns { display:flex; gap:8px; margin-top:14px; }
@@ -1620,11 +1627,22 @@ if (qs.get('birth')) {
   function cid(p) { return slugOf(p); }
   function playerById(id) { for (var i = 0; i < PLAYERS.length; i++) if (cid(PLAYERS[i]) === id) return PLAYERS[i]; return null; }
   function ovrOf(p) { return OVR[p.tier] || 78; }
-  function loadSquad() {
-    var d = { formation: '4-3-3', slots: {}, manager: null };
-    try { var s = JSON.parse(localStorage.getItem(SQ_KEY) || 'null'); return s ? s : d; } catch (e) { return d; }
+  /* 포메이션별로 각각 라인업 저장: { cur:'4-3-3', f:{ '4-3-3':{slots,manager}, ... } } */
+  function loadAll() {
+    try { var a = JSON.parse(localStorage.getItem(SQ_KEY) || 'null'); if (a && a.f) return a; } catch (e) {}
+    return { cur: '4-3-3', f: {} };
   }
-  function saveSquad(s) { try { localStorage.setItem(SQ_KEY, JSON.stringify(s)); } catch (e) {} }
+  function saveAll(a) { try { localStorage.setItem(SQ_KEY, JSON.stringify(a)); } catch (e) {} }
+  function loadSquad() {
+    var a = loadAll(), f = a.f[a.cur] || { slots: {}, manager: null };
+    return { formation: a.cur, slots: f.slots || {}, manager: f.manager || null };
+  }
+  function saveSquad(s) {
+    var a = loadAll(); a.cur = s.formation; a.f[s.formation] = { slots: s.slots, manager: s.manager }; saveAll(a);
+  }
+  function setFormation(f) {
+    var a = loadAll(); a.cur = f; if (!a.f[f]) a.f[f] = { slots: {}, manager: null }; saveAll(a);
+  }
 
   function slotList(form) {
     var out = [], lines = FORMATIONS[form] || FORMATIONS['4-3-3'];
@@ -1682,7 +1700,8 @@ if (qs.get('birth')) {
     if (opts.candidates.length) for (var i = 0; i < opts.candidates.length; i++) grid += miniCard(opts.candidates[i], 'sq-pick-c');
     else grid = '<div class="sq-pick-empty">배치할 수 있는 카드가 없어요.<br>도감에서 ' + opts.posLabel + ' 카드를 더 모아보세요.</div>';
     pick.innerHTML = '<div class="sq-pick-sheet"><div class="sq-pick-h">' + opts.title + '</div>'
-      + '<div class="sq-pick-grid">' + grid + '</div>'
+      + (opts.candidates.length ? '<div class="sq-pick-hint">← 좌우로 넘겨서 골라 →</div>' : '')
+      + '<div class="sq-pick-row">' + grid + '</div>'
       + '<div class="sq-pick-btns">' + (opts.filled ? '<button class="clear" id="sqClear">이 자리 비우기</button>' : '') + '<button id="sqCancel">닫기</button></div></div>';
     pick.classList.add('show');
     var cards = pick.querySelectorAll('.sq-pick-c');
@@ -1756,7 +1775,7 @@ if (qs.get('birth')) {
 
     /* 이벤트 */
     var forms = panel.querySelectorAll('.sq-form');
-    for (var a = 0; a < forms.length; a++) (function (el) { el.onclick = function () { var ss = loadSquad(); ss.formation = el.dataset.f; saveSquad(ss); renderSquad(); }; })(forms[a]);
+    for (var a = 0; a < forms.length; a++) (function (el) { el.onclick = function () { setFormation(el.dataset.f); renderSquad(); }; })(forms[a]);
 
     var sl = panel.querySelectorAll('.sq-slot');
     for (var b = 0; b < sl.length; b++) (function (el) {
