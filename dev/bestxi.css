@@ -23,6 +23,20 @@
 .sq-rate .boost { color: var(--red-text); }
 .sq-boostline { text-align: center; font-size: 13px; font-weight: 700; color: var(--red-text); margin-bottom: 14px; }
 
+/* 팀 등급 뱃지 */
+.sq-tier { text-align: center; border-radius: 14px; padding: 13px; margin-bottom: 14px; border: 1px solid; }
+.sq-tier .tb-badge { font-family: 'Anton',sans-serif; font-size: 20px; letter-spacing: 1px; }
+.sq-tier .tb-perks { font-size: 12.5px; font-weight: 700; margin-top: 5px; }
+.tier-bronze { background: linear-gradient(135deg, rgba(201,145,74,0.22), rgba(201,145,74,0.06)); border-color: rgba(201,145,74,0.5); }
+.tier-bronze .tb-badge { color: #d8a268; } .tier-bronze .tb-perks { color: #c9914a; }
+.tier-silver { background: linear-gradient(135deg, rgba(205,211,218,0.2), rgba(205,211,218,0.05)); border-color: rgba(205,211,218,0.5); }
+.tier-silver .tb-badge { color: #e3e8ee; } .tier-silver .tb-perks { color: #cdd3da; }
+.tier-gold { background: linear-gradient(135deg, rgba(232,199,100,0.26), rgba(232,199,100,0.07)); border-color: rgba(232,199,100,0.6); }
+.tier-gold .tb-badge { color: #f0d98c; text-shadow: 0 0 14px rgba(240,217,140,0.5); } .tier-gold .tb-perks { color: #e8c764; }
+.tier-wc { background: radial-gradient(120% 100% at 50% 0%, rgba(240,217,140,0.32), rgba(201,162,60,0.1)); border-color: #f0d98c; animation: wcPulse 1.8s ease-in-out infinite; }
+.tier-wc .tb-badge { color: #fff2c4; text-shadow: 0 0 18px rgba(240,217,140,0.85); } .tier-wc .tb-perks { color: #f0d98c; }
+@keyframes wcPulse { 0%,100% { box-shadow: 0 0 22px rgba(201,162,60,0.4); } 50% { box-shadow: 0 0 40px rgba(201,162,60,0.75); } }
+
 /* 감독 슬롯 */
 .sq-mgr { display: flex; align-items: center; gap: 12px; background: linear-gradient(135deg, rgba(28,52,110,0.3), rgba(28,52,110,0.08)); border: 1px solid rgba(120,150,210,0.4); border-radius: 14px; padding: 10px 14px; margin-bottom: 14px; cursor: pointer; }
 .sq-mgr .mlabel { font-family: 'Anton',sans-serif; font-size: 12px; letter-spacing: 2px; color: #9fc0f0; }

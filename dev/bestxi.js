@@ -54,7 +54,17 @@
     return Math.min(99, r);
   }
   function filledCount(s) { var slots = slotList(s.formation), c = 0; for (var i = 0; i < slots.length; i++) if (s.slots[i]) c++; return c; }
-  function squadBoost(s) { return Math.max(0, Math.min(8, Math.round((squadRating(s) - 60) / 5))); }
+  /* 팀 등급: 11명 다 채워야 뜸. 스쿼드 OVR로 등급 + 혜택 */
+  function teamTier(s) {
+    if (filledCount(s) < 11) return null;
+    var r = squadRating(s);
+    if (r >= 92) return { key: 'wc', name: '월드클래스', icon: '💎', boost: 9, form: 1 };
+    if (r >= 87) return { key: 'gold', name: '골드', icon: '🥇', boost: 7, form: 1 };
+    if (r >= 82) return { key: 'silver', name: '실버', icon: '🥈', boost: 5, form: 0 };
+    return { key: 'bronze', name: '브론즈', icon: '🥉', boost: 3, form: 0 };
+  }
+  function squadBoost(s) { var t = teamTier(s); return t ? t.boost : Math.min(2, Math.floor(filledCount(s) / 11 * 3)); }
+  function squadForm(s) { var t = teamTier(s); return t ? t.form : 0; }
 
   /* ---- 네비 + 패널 ---- */
   var btn = document.createElement('button');
@@ -147,7 +157,7 @@
     for (var k in s.slots) { var ki = +k; if (ki >= slots.length || !s.slots[k]) { delete s.slots[k]; continue; } var pp = playerById(s.slots[k]); if (!pp || pp.pos !== slots[ki].pos) delete s.slots[k]; }
     saveSquad(s);
 
-    var rating = squadRating(s), boost = squadBoost(s), filled = filledCount(s);
+    var rating = squadRating(s), boost = squadBoost(s), filled = filledCount(s), tier = teamTier(s);
     var mgr = s.manager ? playerById(s.manager) : null;
 
     var h = '<div class="sq-title">MY 베스트 11</div><div class="sq-sub">모은 카드로 스쿼드를 짜면 오늘 운세가 강해져</div>';
@@ -158,7 +168,12 @@
     h += '<div class="sq-rate"><div class="col"><div class="k">스쿼드 OVR</div><div class="ovr">' + rating + '</div></div>'
       + '<div class="col"><div class="k">완성도</div><div class="v">' + filled + '/11</div></div>'
       + '<div class="col"><div class="k">오늘 승률</div><div class="v boost">+' + boost + '%p</div></div></div>';
-    h += '<div class="sq-boostline">' + (filled < 11 ? '11명 다 채우고 좋은 카드일수록 보너스 ↑' : (boost >= 6 ? '월드클래스 스쿼드! 🔥' : '스쿼드 완성!')) + '</div>';
+    if (tier) {
+      h += '<div class="sq-tier tier-' + tier.key + '"><div class="tb-badge">' + tier.icon + ' ' + tier.name + ' 스쿼드</div>'
+        + '<div class="tb-perks">승률 +' + tier.boost + '%p' + (tier.form ? ' &nbsp;·&nbsp; 오늘의 폼 +' + tier.form + '구슬 ⚽' : '') + '</div></div>';
+    } else {
+      h += '<div class="sq-boostline">11명 다 채우면 <b style="color:#fff">팀 등급</b>이 떠 — 좋은 카드일수록 높은 등급 + 혜택 ↑</div>';
+    }
 
     /* 감독 슬롯 */
     h += '<div class="sq-mgr" id="sqMgr"><div class="mthumb">' + (mgr && mgr.img ? '<img src="' + mgr.img + '">' : '') + '</div>'
@@ -220,7 +235,10 @@
   function applyBoost() {
     if (typeof currentFortune === 'undefined' || !currentFortune) return;
     var pctEl = document.getElementById('wrPct'); if (!pctEl) return;
-    var b = squadBoost(loadSquad());
+    var s = loadSquad();
+    var b = squadBoost(s), fb = squadForm(s), tier = teamTier(s);
+
+    /* 승률 보너스 */
     var total = Math.min(99, currentFortune.winRate + b);
     pctEl.textContent = total + '%';
     var fill = document.getElementById('wrFill'); if (fill) { fill.style.width = '0%'; setTimeout(function () { fill.style.width = total + '%'; }, 240); }
@@ -229,11 +247,22 @@
       var vEl = document.getElementById('wrVerdict'); if (vEl) vEl.textContent = wv.word;
       var fEl = document.getElementById('wrFoot'); if (fEl) fEl.textContent = wv.foot;
     }
+
+    /* 오늘의 폼 구슬 보너스(골드+) — 항상 base+fb 로 재설정 */
+    if (typeof ballHtml === 'function') {
+      var nf = Math.min(5, currentFortune.scores.total + fb);
+      var fh = ballHtml(nf);
+      var fbEl = document.getElementById('formBalls'); if (fbEl) fbEl.innerHTML = fh;
+      var btEl = document.getElementById('bTotal'); if (btEl) btEl.innerHTML = fh;
+      if (typeof FORM_WORD !== 'undefined') { var fwEl = document.getElementById('formWord'); if (fwEl) fwEl.textContent = 'FORM : ' + FORM_WORD[nf]; }
+    }
+
+    /* 보너스 태그 */
     var foot = document.getElementById('wrFoot');
     var tag = document.getElementById('wrSquadTag');
     if (b > 0 && foot) {
       if (!tag) { tag = document.createElement('span'); tag.id = 'wrSquadTag'; tag.className = 'wr-squad'; foot.parentNode.appendChild(tag); }
-      tag.textContent = '⚽ 베스트11 보너스 +' + b + '%p';
+      tag.textContent = (tier ? tier.icon + ' ' + tier.name + ' 스쿼드 ' : '⚽ 베스트11 ') + '+' + b + '%p' + (fb > 0 ? ' · 폼 +' + fb + '구슬' : '');
     } else if (tag) { tag.remove(); }
   }
   if (window.showFortune && !window._sfBoostHook) {
